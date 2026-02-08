@@ -1,0 +1,23 @@
+@{
+    // Set the page title that appears in the browser tab
+    ViewData["Title"] = "Home";
+}
+
+<!-- Main homepage content - centered and welcoming -->
+<div class="text-center">
+    <!-- Large heading to welcome users -->
+    <h1 class="display-4">Appointment Management System</h1>
+    
+    <!-- Subtitle with brief instructions -->
+    <p class="lead">Use the navigation bar to manage appointments and staff.</p>
+    
+    <!-- Call-to-action buttons for the main features -->
+    <!-- Using Bootstrap classes for spacing and alignment -->
+    <div class="mt-4 d-flex justify-content-center gap-3">
+        <!-- Primary button leads to appointments (the main feature) -->
+        <a class="btn btn-primary" asp-controller="Appointments" asp-action="Index">View Appointments</a>
+        
+        <!-- Secondary button for staff management -->
+        <a class="btn btn-outline-primary" asp-controller="Staffs" asp-action="Index">Manage Staff</a>
+    </div>
+</div>

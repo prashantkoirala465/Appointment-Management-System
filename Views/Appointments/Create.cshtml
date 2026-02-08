@@ -1,0 +1,104 @@
+@* Form to create a new appointment *@
+@* This is where clients get booked into the system *@
+@model AppointmentSystem.Web.Models.Appointment
+
+@{
+    // Set the page title
+    ViewData["Title"] = "Create Appointment";
+}
+
+<!-- Page heading -->
+<h1>Create Appointment</h1>
+
+<hr />
+
+<!-- Two-column layout - form takes up half width on medium+ screens -->
+<div class="row">
+    <div class="col-md-6">
+        <!-- Form posts to the Create action when submitted -->
+        <form asp-action="Create">
+            <!-- Display any model-level validation errors -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Staff selection dropdown -->
+            <!-- This dropdown is populated from ViewBag.StaffId in the controller -->
+            <div class="mb-3">
+                <label asp-for="StaffId" class="form-label"></label>
+                <select asp-for="StaffId" class="form-select" asp-items="ViewBag.StaffId"></select>
+                <span asp-validation-for="StaffId" class="text-danger"></span>
+            </div>
+
+            <!-- Client Name - who is this appointment for? -->
+            <!-- This is a required field -->
+            <div class="mb-3">
+                <label asp-for="ClientName" class="form-label"></label>
+                <input asp-for="ClientName" class="form-control" />
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
+
+            <!-- Client Email - optional but useful for sending confirmations -->
+            <!-- Client-side validation ensures proper email format -->
+            <div class="mb-3">
+                <label asp-for="ClientEmail" class="form-label"></label>
+                <input asp-for="ClientEmail" class="form-control" />
+                <span asp-validation-for="ClientEmail" class="text-danger"></span>
+            </div>
+
+            <!-- Client Phone - required so we can contact them if needed -->
+            <!-- Validated for phone format -->
+            <div class="mb-3">
+                <label asp-for="ClientPhone" class="form-label"></label>
+                <input asp-for="ClientPhone" class="form-control" />
+                <span asp-validation-for="ClientPhone" class="text-danger"></span>
+            </div>
+
+            <!-- Start Time - when does this appointment begin? -->
+            <!-- Browser shows a datetime picker for this field -->
+            <div class="mb-3">
+                <label asp-for="StartTime" class="form-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+
+            <!-- Duration in minutes -->
+            <!-- How long will this appointment take? Common values: 30, 45, 60 -->
+            <div class="mb-3">
+                <label asp-for="DurationMinutes" class="form-label"></label>
+                <input asp-for="DurationMinutes" class="form-control" />
+                <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+            </div>
+
+            <!-- Status field -->
+            <!-- Usually "Scheduled" for new appointments -->
+            <!-- Other values: "Completed", "Cancelled", "No-Show" -->
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+                <!-- Help text to guide users on what to enter -->
+                <div class="form-text">Example: Scheduled, Completed, Cancelled</div>
+            </div>
+
+            <!-- Notes field - optional -->
+            <!-- For any special instructions or details about the appointment -->
+            <!-- Using textarea for multi-line input -->
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <!-- Submit button to create the appointment -->
+            <button type="submit" class="btn btn-primary">Create</button>
+            
+            <!-- Cancel button - returns to appointments list without saving -->
+            <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@* This section includes client-side validation scripts *@
+@* These provide instant feedback to users before they submit the form *@
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

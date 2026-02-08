@@ -1,0 +1,32 @@
+@model AppointmentSystem.Web.Models.Staff
+
+@{
+    ViewData["Title"] = "Staff Details";
+}
+
+<h1>Staff Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.FullName)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.FullName)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Email)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.Email)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.PhoneNumber)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.PhoneNumber)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Specialty)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.Specialty)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.IsActive)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.IsActive)</dd>
+    </dl>
+</div>
+
+<div class="mt-3">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,69 @@
+@* This page shows a form to create a new staff member *@
+@* The model is bound to a Staff object that gets populated when the form is submitted *@
+@model AppointmentSystem.Web.Models.Staff
+
+@{
+    // Set the page title
+    ViewData["Title"] = "Create Staff";
+}
+
+<!-- Page heading -->
+<h1>Create Staff</h1>
+
+<hr />
+
+<!-- Two-column layout - form takes up half the width on medium+ screens -->
+<div class="row">
+    <div class="col-md-6">
+        <!-- Form that posts to the Create action in StaffsController -->
+        <form asp-action="Create">
+            <!-- Shows model-level validation errors (not tied to a specific field) -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Full Name field - required -->
+            <div class="mb-3">
+                <!-- Label automatically gets the text from [DisplayName] attribute -->
+                <label asp-for="FullName" class="form-label"></label>
+                <!-- Input field bound to FullName property -->
+                <input asp-for="FullName" class="form-control" />
+                <!-- Validation message appears here if FullName is invalid -->
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <!-- Email field - optional but validated for format -->
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <!-- Phone Number field - optional -->
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <!-- Specialty field - optional -->
+            <!-- Examples: "General Medicine", "Pediatrics", "Dermatology" -->
+            <div class="mb-3">
+                <label asp-for="Specialty" class="form-label"></label>
+                <input asp-for="Specialty" class="form-control" />
+                <span asp-validation-for="Specialty" class="text-danger"></span>
+            </div>
+
+            <!-- IsActive checkbox - defaults to true -->
+            <!-- This determines if the staff member is currently working -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="IsActive" />
+                <label class="form-check-label" asp-for="IsActive"></label>
+            </div>
+
+            <!-- Submit button creates the new staff member -->
+            <button type="submit" class="btn btn-primary">Create</button>
+            
+            <!-- Cancel button - goes back to the staff list without saving -->
+            <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+        </form>
+    </div>
+</div>

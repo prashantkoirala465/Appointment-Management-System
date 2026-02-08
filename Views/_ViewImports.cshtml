@@ -1,0 +1,13 @@
+@* This file is automatically included in every view in the application *@
+@* It sets up common imports and tag helpers that all views can use *@
+
+@* Import the main namespace so we can reference types without fully qualifying them *@
+@using AppointmentSystem.Web
+
+@* Import the Models namespace so views can use Appointment, Staff, etc. directly *@
+@using AppointmentSystem.Web.Models
+
+@* Enable Tag Helpers for all views *@
+@* Tag Helpers are the "asp-" attributes in our HTML (asp-action, asp-controller, asp-for, etc.) *@
+@* They make Razor code cleaner and more HTML-like than the older @Html.ActionLink syntax *@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

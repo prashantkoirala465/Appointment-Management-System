@@ -1,0 +1,41 @@
+@model AppointmentSystem.Web.Models.Appointment
+
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<h1>Appointment Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Staff</dt>
+        <dd class="col-sm-9">@Model.Staff?.FullName</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ClientName)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.ClientName)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ClientEmail)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.ClientEmail)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ClientPhone)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.ClientPhone)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.StartTime)</dt>
+        <dd class="col-sm-9">@Model.StartTime.ToString("yyyy-MM-dd HH:mm")</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DurationMinutes)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.DurationMinutes) minutes</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Status)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.Status)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Notes)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.Notes)</dd>
+    </dl>
+</div>
+
+<div class="mt-3">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+</div>

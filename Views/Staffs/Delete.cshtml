@@ -1,0 +1,29 @@
+@model AppointmentSystem.Web.Models.Staff
+
+@{
+    ViewData["Title"] = "Delete Staff";
+}
+
+<h1>Delete Staff</h1>
+
+<h3>Are you sure you want to delete this staff member?</h3>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.FullName)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.FullName)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Email)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.Email)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.PhoneNumber)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(m => m.PhoneNumber)</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,56 @@
+@* This page displays a list of all staff members *@
+@* The model is a collection of Staff objects passed from the controller *@
+@model IEnumerable<AppointmentSystem.Web.Models.Staff>
+
+@{
+    // Set the page title for the browser tab and breadcrumbs
+    ViewData["Title"] = "Staff";
+}
+
+<!-- Page heading -->
+<h1>Staff</h1>
+
+<!-- Button to add new staff members -->
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add Staff Member</a>
+</p>
+
+<!-- Table to display all staff members -->
+<!-- table-striped gives alternating row colors for better readability -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <!-- Table headers - using DisplayNameFor to get the display names from the model -->
+            <!-- This respects [DisplayName] attributes we set in the Staff model -->
+            <th>@Html.DisplayNameFor(model => model.FullName)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.Specialty)</th>
+            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+            <th></th> <!-- Empty header for the action buttons column -->
+        </tr>
+    </thead>
+    <tbody>
+@* Loop through each staff member in the collection *@
+@foreach (var item in Model)
+{
+        <tr>
+            <!-- Display each staff member's properties -->
+            <!-- DisplayFor handles null values gracefully and formats data appropriately -->
+            <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+            <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.Specialty)</td>
+            <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+            
+            <!-- Action links for this specific staff member -->
+            <!-- asp-route-id passes the staff member's ID to the controller action -->
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

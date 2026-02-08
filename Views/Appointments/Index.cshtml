@@ -1,0 +1,74 @@
+@* This page displays a list of all appointments in the system *@
+@* The model is a collection of Appointment objects with their associated Staff data *@
+@model IEnumerable<AppointmentSystem.Web.Models.Appointment>
+
+@{
+    // Set the page title
+    ViewData["Title"] = "Appointments";
+}
+
+<!-- Page heading -->
+<h1>Appointments</h1>
+
+<!-- Button to create a new appointment -->
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Appointment</a>
+</p>
+
+<!-- Table displaying all appointments -->
+<!-- table-striped adds alternating row colors for easier reading -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <!-- Custom header for Staff column since it's a navigation property -->
+            <th>Staff</th>
+            
+            <!-- These headers automatically pull from the model's display names -->
+            <th>@Html.DisplayNameFor(model => model.ClientName)</th>
+            <th>@Html.DisplayNameFor(model => model.StartTime)</th>
+            <th>@Html.DisplayNameFor(model => model.DurationMinutes)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            
+            <!-- Empty header for the action buttons column -->
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @* Loop through each appointment in the collection *@
+    @foreach (var item in Model)
+    {
+        <tr>
+            <!-- Display the staff member's name, with a fallback to empty string if null -->
+            <!-- The ? operator safely handles null Staff references -->
+            <td>@(item.Staff?.FullName ?? "")</td>
+            
+            <!-- Display client name -->
+            <td>@item.ClientName</td>
+            
+            <!-- Format the start time in a readable format (Year-Month-Day Hour:Minute) -->
+            <td>@item.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+            
+            <!-- Show duration in minutes -->
+            <td>@item.DurationMinutes</td>
+            
+            <!-- Display current status (Scheduled, Completed, Cancelled, etc.) -->
+            <td>@item.Status</td>
+            
+            <!-- Action links for this appointment -->
+            <!-- Each link passes the appointment's ID to the controller -->
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@* Show a friendly message if there are no appointments *@
+@* This is better UX than showing an empty table *@
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No appointments found.</div>
+}

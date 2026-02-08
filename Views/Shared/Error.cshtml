@@ -1,0 +1,31 @@
+@* Error page shown when something goes wrong in the application *@
+@* This is a user-friendly way to tell users there was a problem *@
+@model ErrorViewModel
+
+@{
+    // Set the page title
+    ViewData["Title"] = "Error";
+}
+
+<!-- Main error heading in red to get attention -->
+<h1 class="text-danger">Error.</h1>
+
+<!-- Brief explanation of what happened -->
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+
+@* Only show the Request ID if it's available *@
+@* This ID helps developers trace the error in logs *@
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<!-- Development instructions -->
+<!-- In production, we don't show detailed error messages for security -->
+<!-- But developers can see full details by switching to Development environment -->
+<h3>Development Mode</h3>
+<p>
+    Swap to <strong>Development</strong> environment to see detailed errors.
+</p>
