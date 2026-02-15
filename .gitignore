@@ -1,0 +1,41 @@
+# Build output
+bin/
+obj/
+
+# .NET user-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+*.csproj.user
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# SQLite database files (local dev)
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+
+# dotnet tool manifests
+.config/dotnet-tools.json
+
+# Publish output
+publish/
+out/
