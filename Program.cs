@@ -44,6 +44,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         // The cookie expires after 30 minutes of inactivity
         // After that, the user needs to log in again
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    })
+    // Add Google OAuth as an external authentication provider
+    // Users can click "Sign in with Google" and authenticate via their Google account
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        // Request email and profile scopes so we get the user's name and email
+        options.Scope.Add("email");
+        options.Scope.Add("profile");
     });
 
 // Now we build the app with all the services we configured above
