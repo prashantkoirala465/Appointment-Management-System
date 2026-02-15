@@ -21,8 +21,9 @@
             <a asp-controller="Account" asp-action="Login" class="ln-nav-cta">Get started</a>
         </div>
 
-        <button class="ln-nav-toggle" onclick="toggleMobileNav()" aria-label="Menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <button class="ln-nav-toggle" id="navToggle" onclick="toggleMobileNav()" aria-label="Menu">
+            <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
     </div>
 </nav>
@@ -45,6 +46,12 @@
         <div class="ln-hero-decor-strip" style="background:#e8ddd0;"></div>
         <div class="ln-hero-decor-strip" style="background:#2d6a4f;"></div>
     </div>
+    <div class="ln-hero-scroll">
+        <span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            Scroll to explore
+        </span>
+    </div>
 </section>
 
 
@@ -53,7 +60,7 @@
    ═══════════════════════════════════════ *@
 <section class="ln-preview">
     <div class="ln-container">
-        <div class="ln-preview-card">
+        <div class="ln-preview-card reveal-scale">
             <div class="ln-preview-header">
                 <div class="ln-preview-provider">
                     <div class="ln-preview-provider-avatar">W</div>
@@ -101,6 +108,14 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Trusted by thousands of businesses worldwide
         </div>
+
+        <div class="ln-trust-logos">
+            <span class="ln-trust-logo">Calm Studio</span>
+            <span class="ln-trust-logo">FlexFit</span>
+            <span class="ln-trust-logo">Glow&Co</span>
+            <span class="ln-trust-logo">ZenSpa</span>
+            <span class="ln-trust-logo">The Barber Co</span>
+        </div>
     </div>
 </section>
 
@@ -112,8 +127,7 @@
     <div class="ln-container">
         <div class="ln-features-grid">
 
-            <!-- Wide card -->
-            <div class="ln-feature-card ln-feature-card--wide">
+            <div class="ln-feature-card ln-feature-card--wide reveal">
                 <div class="ln-feature-card-icon" style="background:#e8f4fd; color:#2980b9;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 </div>
@@ -139,28 +153,44 @@
             </div>
 
             <!-- Card 2 -->
-            <div class="ln-feature-card">
+            <div class="ln-feature-card reveal">
                 <div class="ln-feature-card-icon" style="background:#e9f7ef; color:#27ae60;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                 </div>
                 <h3>Enable automated appointment booking</h3>
                 <p>Seamlessly manage multiple locations and staff — let your clients find an open slot, book, and receive confirmations automatically without any back‑and‑forth.</p>
-                <div class="ln-feature-pill">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    Booking confirmed!
+                <div class="ln-feature-mock">
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#27ae60;"></span>
+                        Auto-confirm
+                        <span style="margin-left:auto; font-weight:500;">Enabled</span>
+                    </div>
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#2980b9;"></span>
+                        Email reminder
+                        <span style="margin-left:auto; font-weight:500;">24hr before</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Card 3 -->
-            <div class="ln-feature-card">
+            <div class="ln-feature-card reveal">
                 <div class="ln-feature-card-icon" style="background:#fef5e7; color:#d4ac0d;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
                 <h3>Grow your customer base and keep them engaged</h3>
                 <p>Create branded booking pages to strengthen brand presence, grow engagement with powerful loyalty tools, and drive returning customers through automated follow‑ups.</p>
-                <div class="ln-feature-pill">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    Client returned
+                <div class="ln-feature-mock">
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#d4ac0d;"></span>
+                        New clients this month
+                        <span style="margin-left:auto; font-weight:600; color:var(--color-success);">+24%</span>
+                    </div>
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#e74c3c;"></span>
+                        Returning clients
+                        <span style="margin-left:auto; font-weight:600; color:var(--color-success);">+18%</span>
+                    </div>
                 </div>
             </div>
 
@@ -174,14 +204,18 @@
    ═══════════════════════════════════════ *@
 <section class="ln-industries" id="industries">
     <div class="ln-container">
-        <div class="ln-section-header ln-section-header--split">
-            <h2>Appointment software that adapts to your business</h2>
+        <div class="ln-section-header ln-section-header--split reveal">
+            <div>
+                <h2>Appointment software that adapts to your business</h2>
+            </div>
             <p>Free up time in your day with scheduling tools tailored to your needs.</p>
         </div>
 
-        <div class="ln-industries-grid">
-            <div class="ln-industry-card">
-                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=440&fit=crop" alt="Hair and Beauty Salon" loading="lazy" />
+        <div class="ln-industries-grid stagger-children">
+            <div class="ln-industry-card reveal">
+                <div class="ln-industry-card-img">
+                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=440&fit=crop" alt="Hair and Beauty Salon" loading="lazy" />
+                </div>
                 <div class="ln-industry-info">
                     <h4>Hair, Nails &amp; Beauty Services</h4>
                     <div class="ln-industry-tags">
@@ -191,8 +225,10 @@
                     </div>
                 </div>
             </div>
-            <div class="ln-industry-card">
-                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=440&fit=crop" alt="Spa and Wellness" loading="lazy" />
+            <div class="ln-industry-card reveal">
+                <div class="ln-industry-card-img">
+                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=440&fit=crop" alt="Spa and Wellness" loading="lazy" />
+                </div>
                 <div class="ln-industry-info">
                     <h4>Spa &amp; Wellness</h4>
                     <div class="ln-industry-tags">
@@ -202,8 +238,10 @@
                     </div>
                 </div>
             </div>
-            <div class="ln-industry-card">
-                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=440&fit=crop" alt="Fitness and Sports" loading="lazy" />
+            <div class="ln-industry-card reveal">
+                <div class="ln-industry-card-img">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=440&fit=crop" alt="Fitness and Sports" loading="lazy" />
+                </div>
                 <div class="ln-industry-info">
                     <h4>Fitness &amp; Sports Training</h4>
                     <div class="ln-industry-tags">
@@ -224,7 +262,7 @@
 <section class="ln-detail" style="background:var(--color-surface);">
     <div class="ln-container">
         <div class="ln-detail-row">
-            <div class="ln-detail-content">
+            <div class="ln-detail-content reveal-left">
                 <h2>Delight clients with robust online booking options and payment tools</h2>
                 <div class="ln-accordion">
                     <details open>
@@ -241,7 +279,7 @@
                     </details>
                 </div>
             </div>
-            <div class="ln-detail-image">
+            <div class="ln-detail-image reveal-right">
                 <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=640&fit=crop" alt="Client booking experience" loading="lazy" />
             </div>
         </div>
@@ -255,7 +293,7 @@
 <section class="ln-detail">
     <div class="ln-container">
         <div class="ln-detail-row ln-detail-row--reverse">
-            <div class="ln-detail-content">
+            <div class="ln-detail-content reveal-right">
                 <h2>Easy scheduling management, so you&nbsp;can focus on your passion</h2>
                 <div class="ln-accordion">
                     <details open>
@@ -272,7 +310,7 @@
                     </details>
                 </div>
             </div>
-            <div class="ln-detail-image">
+            <div class="ln-detail-image reveal-left">
                 <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=640&fit=crop" alt="Focus on your passion" loading="lazy" />
             </div>
         </div>
@@ -285,8 +323,8 @@
    ═══════════════════════════════════════ *@
 <section class="ln-integrations" id="integrations">
     <div class="ln-container">
-        <p class="ln-integrations-label">Integrate with powerful <a href="#">third‑party apps</a></p>
-        <div class="ln-integrations-grid">
+        <p class="ln-integrations-label reveal">Integrate with powerful <a href="#">third‑party apps</a></p>
+        <div class="ln-integrations-grid reveal">
             <div class="ln-integration-badge">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                 Stripe
@@ -317,10 +355,11 @@
    ═══════════════════════════════════════ *@
 <section class="ln-cta-section">
     <div class="ln-container">
-        <h2>Knowing your name is only the beginning.</h2>
-        <p>Our global support team is ready to help you at every step. Whatever you need, we'll find a way to help you grow — one appointment at a time.</p>
-        <div class="ln-cta-links">
-            <a href="#">Help Center &amp; Learning</a>
+        <h2 class="reveal">Ready to transform your scheduling?</h2>
+        <p class="reveal">Join thousands of businesses that use Appointra to deliver exceptional client experiences — one appointment at a time.</p>
+        <a asp-controller="Account" asp-action="Login" class="ln-cta-btn reveal">Get started free</a>
+        <div class="ln-cta-links reveal">
+            <a href="#">Help Center</a>
             <a href="#">Contact Support</a>
             <a href="#">Video Tutorials</a>
             <a href="/Home/Privacy">Privacy Policy</a>
@@ -338,6 +377,20 @@
             <div class="ln-footer-brand">
                 <a href="/" class="ln-footer-logo">appointra</a>
                 <p>Modern scheduling software for modern businesses. Manage appointments, staff, and clients — all in one place.</p>
+                <div class="ln-footer-social">
+                    <a href="#" aria-label="Twitter">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" aria-label="YouTube">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                    </a>
+                </div>
             </div>
             <div class="ln-footer-col">
                 <h5>Product</h5>

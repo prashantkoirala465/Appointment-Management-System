@@ -10,6 +10,26 @@
 
 <div class="card-custom" style="max-width:540px;">
     <div class="card-body-custom">
+        <div style="display:flex; align-items:center; gap:var(--space-lg); margin-bottom:var(--space-xl); padding-bottom:var(--space-lg); border-bottom:1px solid var(--color-border);">
+            <div style="width:56px; height:56px; border-radius:var(--radius-full); background:var(--color-accent); color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-serif); font-size:var(--font-xl); font-weight:600; flex-shrink:0;">
+                @Model.FullName.Substring(0, 1).ToUpper()
+            </div>
+            <div>
+                <div style="font-family:var(--font-serif); font-size:var(--font-lg); font-weight:500;">@Model.FullName</div>
+                <div style="font-size:var(--font-sm); color:var(--color-text-muted);">@(Model.Specialty ?? "No specialty")</div>
+            </div>
+            <div style="margin-left:auto;">
+                @if (Model.IsActive)
+                {
+                    <span class="badge-status badge-active">Active</span>
+                }
+                else
+                {
+                    <span class="badge-status badge-inactive">Inactive</span>
+                }
+            </div>
+        </div>
+
         <dl class="detail-grid">
             <dt>Full Name</dt>
             <dd>@Model.FullName</dd>
@@ -19,21 +39,6 @@
 
             <dt>Phone</dt>
             <dd>@(Model.PhoneNumber ?? "—")</dd>
-
-            <dt>Specialty</dt>
-            <dd>@(Model.Specialty ?? "—")</dd>
-
-            <dt>Status</dt>
-            <dd>
-                @if (Model.IsActive)
-                {
-                    <span class="badge-status badge-active">Active</span>
-                }
-                else
-                {
-                    <span class="badge-status badge-inactive">Inactive</span>
-                }
-            </dd>
         </dl>
 
         <div class="btn-group-custom" style="margin-top:var(--space-lg);">
