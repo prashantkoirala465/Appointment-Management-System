@@ -1,21 +1,374 @@
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Scheduling Software for Exceptional Client Experiences";
+    Layout = "_Layout";
 }
 
-<div class="landing-page">
-    <div class="landing-content">
-        <div class="landing-badge">Appointment Management System</div>
-        <h1 class="landing-title">Schedule. Manage.<br/>Simplify.</h1>
-        <p class="landing-desc">
-            A clean, modern platform to manage appointments, staff, and users.
-            Built for teams that value clarity over clutter.
-        </p>
-        <a class="landing-cta" asp-controller="Account" asp-action="Login">
-            Sign In
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
+@* ═══════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════ *@
+<nav class="ln-nav">
+    <div class="ln-nav-inner">
+        <a href="/" class="ln-logo">appointra</a>
+
+        <div class="ln-nav-links" id="navLinks">
+            <a href="#features">Features</a>
+            <a href="#industries">Industries</a>
+            <a href="#integrations">Integrations</a>
+        </div>
+
+        <div class="ln-nav-actions" id="navActions">
+            <a asp-controller="Account" asp-action="Login" class="ln-nav-login">Log in</a>
+            <a asp-controller="Account" asp-action="Login" class="ln-nav-cta">Get started</a>
+        </div>
+
+        <button class="ln-nav-toggle" onclick="toggleMobileNav()" aria-label="Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
     </div>
-    <footer class="footer-public">
-        &copy; 2026 AppointmentSystem
-    </footer>
-</div>
+</nav>
+
+
+@* ═══════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════ *@
+<section class="ln-hero">
+    <div class="ln-hero-inner">
+        <h1>Scheduling software to power exceptional client experiences</h1>
+        <p>Book appointments, take payments, and automate the follow-ups—so you can deliver standout service every time.</p>
+        <div class="ln-hero-actions">
+            <a asp-controller="Account" asp-action="Login" class="ln-hero-cta">Get started</a>
+            <span class="ln-hero-subtext">No credit card needed</span>
+        </div>
+    </div>
+    <div class="ln-hero-decor">
+        <div class="ln-hero-decor-strip" style="background:#c4b5a0;"></div>
+        <div class="ln-hero-decor-strip" style="background:#e8ddd0;"></div>
+        <div class="ln-hero-decor-strip" style="background:#2d6a4f;"></div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   PREVIEW / SOCIAL PROOF
+   ═══════════════════════════════════════ *@
+<section class="ln-preview">
+    <div class="ln-container">
+        <div class="ln-preview-card">
+            <div class="ln-preview-header">
+                <div class="ln-preview-provider">
+                    <div class="ln-preview-provider-avatar">W</div>
+                    <div class="ln-preview-provider-info">
+                        <h3>Wellness Studio</h3>
+                        <span>Los Angeles, CA · Online Booking</span>
+                    </div>
+                </div>
+                <div class="ln-preview-stats">
+                    <span><strong>32</strong> day programs</span>
+                    <span><strong>4.9</strong> ★ rating</span>
+                    <span><strong>1,200+</strong> bookings</span>
+                </div>
+            </div>
+
+            <div class="ln-preview-reviews">
+                <div class="ln-preview-review">
+                    <img class="ln-preview-review-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Sarah L." />
+                    <div class="ln-preview-review-content">
+                        <div class="ln-preview-review-name">Sarah L.</div>
+                        <div class="ln-preview-review-stars">★ ★ ★ ★ ★</div>
+                        <div class="ln-preview-review-text">Booking was seamless and I loved getting the automatic reminders. The whole process from start to finish was incredibly smooth.</div>
+                    </div>
+                </div>
+                <div class="ln-preview-review">
+                    <img class="ln-preview-review-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="James M." />
+                    <div class="ln-preview-review-content">
+                        <div class="ln-preview-review-name">James M.</div>
+                        <div class="ln-preview-review-stars">★ ★ ★ ★ ★</div>
+                        <div class="ln-preview-review-text">Best scheduling tool I've used. My clients love how easy it is to book their appointments online anytime.</div>
+                    </div>
+                </div>
+                <div class="ln-preview-review">
+                    <img class="ln-preview-review-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Emma K." />
+                    <div class="ln-preview-review-content">
+                        <div class="ln-preview-review-name">Emma K.</div>
+                        <div class="ln-preview-review-stars">★ ★ ★ ★ ★</div>
+                        <div class="ln-preview-review-text">Love the reminders and the clean interface. It has completely transformed how I manage my practice.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ln-social-proof">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Trusted by thousands of businesses worldwide
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   FEATURE CARDS
+   ═══════════════════════════════════════ *@
+<section class="ln-features" id="features">
+    <div class="ln-container">
+        <div class="ln-features-grid">
+
+            <!-- Wide card -->
+            <div class="ln-feature-card ln-feature-card--wide">
+                <div class="ln-feature-card-icon" style="background:#e8f4fd; color:#2980b9;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <h3>Control your availability with online appointments</h3>
+                <p>Share your link so clients can book on your schedule on your own terms. Customize exactly when and where clients can book and let your staff set their own availability at scale. Power your business with a scheduling automation.</p>
+                <div class="ln-feature-mock">
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#2980b9;"></span>
+                        Monday – Friday
+                        <span style="margin-left:auto; font-weight:500;">9:00 AM – 5:00 PM</span>
+                    </div>
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#27ae60;"></span>
+                        Saturday
+                        <span style="margin-left:auto; font-weight:500;">10:00 AM – 2:00 PM</span>
+                    </div>
+                    <div class="ln-feature-mock-row">
+                        <span class="ln-feature-mock-dot" style="background:#c0392b;"></span>
+                        Sunday
+                        <span style="margin-left:auto; font-weight:500;">Closed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="ln-feature-card">
+                <div class="ln-feature-card-icon" style="background:#e9f7ef; color:#27ae60;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <h3>Enable automated appointment booking</h3>
+                <p>Seamlessly manage multiple locations and staff — let your clients find an open slot, book, and receive confirmations automatically without any back‑and‑forth.</p>
+                <div class="ln-feature-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    Booking confirmed!
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="ln-feature-card">
+                <div class="ln-feature-card-icon" style="background:#fef5e7; color:#d4ac0d;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Grow your customer base and keep them engaged</h3>
+                <p>Create branded booking pages to strengthen brand presence, grow engagement with powerful loyalty tools, and drive returning customers through automated follow‑ups.</p>
+                <div class="ln-feature-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Client returned
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   INDUSTRIES
+   ═══════════════════════════════════════ *@
+<section class="ln-industries" id="industries">
+    <div class="ln-container">
+        <div class="ln-section-header ln-section-header--split">
+            <h2>Appointment software that adapts to your business</h2>
+            <p>Free up time in your day with scheduling tools tailored to your needs.</p>
+        </div>
+
+        <div class="ln-industries-grid">
+            <div class="ln-industry-card">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=440&fit=crop" alt="Hair and Beauty Salon" loading="lazy" />
+                <div class="ln-industry-info">
+                    <h4>Hair, Nails &amp; Beauty Services</h4>
+                    <div class="ln-industry-tags">
+                        <span>Hair salon</span>
+                        <span>Nail salon</span>
+                        <span>Beauty salon</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ln-industry-card">
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=440&fit=crop" alt="Spa and Wellness" loading="lazy" />
+                <div class="ln-industry-info">
+                    <h4>Spa &amp; Wellness</h4>
+                    <div class="ln-industry-tags">
+                        <span>Spa and day spa</span>
+                        <span>Massage Therapy</span>
+                        <span>Medi-spa</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ln-industry-card">
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=440&fit=crop" alt="Fitness and Sports" loading="lazy" />
+                <div class="ln-industry-info">
+                    <h4>Fitness &amp; Sports Training</h4>
+                    <div class="ln-industry-tags">
+                        <span>Personal Trainer</span>
+                        <span>Fitness</span>
+                        <span>Studio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   DETAIL ROW 1 — Booking & Payments
+   ═══════════════════════════════════════ *@
+<section class="ln-detail" style="background:var(--color-surface);">
+    <div class="ln-container">
+        <div class="ln-detail-row">
+            <div class="ln-detail-content">
+                <h2>Delight clients with robust online booking options and payment tools</h2>
+                <div class="ln-accordion">
+                    <details open>
+                        <summary>Seamless booking experience</summary>
+                        <p>Let clients browse available time slots, choose their preferred staff member, and book instantly — all from a beautiful, mobile‑friendly interface. No phone calls required.</p>
+                    </details>
+                    <details>
+                        <summary>Relationship-building tools</summary>
+                        <p>Send automated confirmations, reminders, and follow‑up messages. Keep a complete client history with notes, so every interaction feels personal and intentional.</p>
+                    </details>
+                    <details>
+                        <summary>Easy and secure client payment options</summary>
+                        <p>Accept payments at booking or on‑site. Integrated with major payment providers to process transactions securely, reduce no‑shows with prepayment, and simplify reconciliation.</p>
+                    </details>
+                </div>
+            </div>
+            <div class="ln-detail-image">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=640&fit=crop" alt="Client booking experience" loading="lazy" />
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   DETAIL ROW 2 — Management
+   ═══════════════════════════════════════ *@
+<section class="ln-detail">
+    <div class="ln-container">
+        <div class="ln-detail-row ln-detail-row--reverse">
+            <div class="ln-detail-content">
+                <h2>Easy scheduling management, so you&nbsp;can focus on your passion</h2>
+                <div class="ln-accordion">
+                    <details open>
+                        <summary>Scheduling software with flexible availability tools</summary>
+                        <p>Set recurring hours, block off personal time, create buffer periods between appointments, and define service‑specific durations — everything adapts to your workflow.</p>
+                    </details>
+                    <details>
+                        <summary>Calendar and staff management in real‑time per day</summary>
+                        <p>View every team member's schedule at a glance. Drag‑and‑drop to reassign, spot gaps instantly, and balance workloads across your entire operation.</p>
+                    </details>
+                    <details>
+                        <summary>Scheduling tools to grow your client reach</summary>
+                        <p>Embed your booking page anywhere — your website, social profiles, or email signatures. Meet clients where they already are, and grow bookings organically.</p>
+                    </details>
+                </div>
+            </div>
+            <div class="ln-detail-image">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=640&fit=crop" alt="Focus on your passion" loading="lazy" />
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   INTEGRATIONS
+   ═══════════════════════════════════════ *@
+<section class="ln-integrations" id="integrations">
+    <div class="ln-container">
+        <p class="ln-integrations-label">Integrate with powerful <a href="#">third‑party apps</a></p>
+        <div class="ln-integrations-grid">
+            <div class="ln-integration-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Stripe
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+                Square
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Zapier
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                PayPal
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Google Calendar
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   CTA SECTION
+   ═══════════════════════════════════════ *@
+<section class="ln-cta-section">
+    <div class="ln-container">
+        <h2>Knowing your name is only the beginning.</h2>
+        <p>Our global support team is ready to help you at every step. Whatever you need, we'll find a way to help you grow — one appointment at a time.</p>
+        <div class="ln-cta-links">
+            <a href="#">Help Center &amp; Learning</a>
+            <a href="#">Contact Support</a>
+            <a href="#">Video Tutorials</a>
+            <a href="/Home/Privacy">Privacy Policy</a>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ *@
+<footer class="ln-footer">
+    <div class="ln-container">
+        <div class="ln-footer-grid">
+            <div class="ln-footer-brand">
+                <a href="/" class="ln-footer-logo">appointra</a>
+                <p>Modern scheduling software for modern businesses. Manage appointments, staff, and clients — all in one place.</p>
+            </div>
+            <div class="ln-footer-col">
+                <h5>Product</h5>
+                <a href="#features">Features</a>
+                <a href="#industries">Industries</a>
+                <a href="#">Pricing</a>
+                <a href="#">Online Booking</a>
+                <a href="#">Client Management</a>
+            </div>
+            <div class="ln-footer-col">
+                <h5>Resources</h5>
+                <a href="#">Help Center</a>
+                <a href="#">Blog</a>
+                <a href="#">Video Tutorials</a>
+                <a href="#">Customer Stories</a>
+            </div>
+            <div class="ln-footer-col">
+                <h5>Company</h5>
+                <a href="#">About</a>
+                <a href="/Home/Privacy">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Careers</a>
+            </div>
+        </div>
+        <div class="ln-footer-bottom">
+            <p>&copy; 2026 Appointra. All rights reserved.</p>
+            <div class="ln-footer-bottom-links">
+                <a href="/Home/Privacy">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </div>
+</footer>
