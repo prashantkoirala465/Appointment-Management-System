@@ -1,6 +1,7 @@
 // These are the essential packages we need to run our appointment management system
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.OpenApi;
 using AppointmentSystem.Web.Data;
 using AppointmentSystem.Web.Filters;
 
@@ -15,6 +16,22 @@ builder.Services.AddControllersWithViews(options =>
     // Add the MenuLoaderFilter globally so it runs before every action
     // This ensures the navigation bar always has the correct menus for the logged-in user
     options.Filters.AddService<MenuLoaderFilter>();
+});
+
+// Register the API explorer so Swagger can discover all API endpoints
+builder.Services.AddEndpointsApiExplorer();
+
+// Configure Swagger/OpenAPI documentation for our REST API
+// This automatically generates interactive API docs at /swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Appointra API",
+        Version = "v1",
+        Description = "REST API for the Appointra Appointment Management System. " +
+                      "Provides endpoints for managing appointments, staff, users, roles, and menus."
+    });
 });
 
 // Register the MenuLoaderFilter with dependency injection
@@ -44,6 +61,29 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         // The cookie expires after 30 minutes of inactivity
         // After that, the user needs to log in again
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+        // For API requests (paths starting with /api/), return 401/403 JSON responses
+        // instead of redirecting to the login page — this is essential for API consumers
+        options.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            }
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
     })
     // Add Google OAuth as an external authentication provider
     // Users can click "Sign in with Google" and authenticate via their Google account
@@ -66,6 +106,15 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
     await AppointmentSystem.Web.Data.DbSeeder.SeedAsync(context);
 }
+
+// Enable Swagger UI for interactive API documentation
+// Available at /swagger in any environment for easy API exploration and testing
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Appointra API v1");
+    options.DocumentTitle = "Appointra API Documentation";
+});
 
 // This section configures how our app behaves when handling web requests
 // We have different settings for development vs production environments
