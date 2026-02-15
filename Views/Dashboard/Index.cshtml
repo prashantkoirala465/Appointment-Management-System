@@ -1,154 +1,115 @@
 @model AppointmentSystem.Web.Models.DashboardViewModel
 @{
-    // Set the page title that appears in the browser tab
     ViewData["Title"] = "Dashboard";
 }
 
-<!-- Dashboard heading -->
-<h1 class="mb-4">Dashboard</h1>
-<p class="text-muted mb-4">Welcome back! Here's an overview of your Appointment Management System.</p>
+<div style="margin-bottom: var(--space-xl);">
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Overview of your appointment management system.</p>
+</div>
 
-<!-- Row 1: Appointment Statistics Cards -->
-<div class="row g-3 mb-4">
-    <!-- Total Appointments Card -->
-    <div class="col-md-3">
-        <div class="card border-start border-primary border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">Total Appointments</div>
-                <div class="h3 mb-0 fw-bold">@Model.TotalAppointments</div>
-            </div>
+<!-- Stat Cards Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#e8f4fd; color:#2980b9;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         </div>
+        <div class="stat-label">Total Appointments</div>
+        <div class="stat-value">@Model.TotalAppointments</div>
     </div>
 
-    <!-- Scheduled Appointments Card -->
-    <div class="col-md-3">
-        <div class="card border-start border-info border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">Scheduled</div>
-                <div class="h3 mb-0 fw-bold text-info">@Model.ScheduledAppointments</div>
-            </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#e8f4fd; color:#2980b9;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
+        <div class="stat-label">Scheduled</div>
+        <div class="stat-value" style="color: var(--color-info);">@Model.ScheduledAppointments</div>
     </div>
 
-    <!-- Completed Appointments Card -->
-    <div class="col-md-3">
-        <div class="card border-start border-success border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">Completed</div>
-                <div class="h3 mb-0 fw-bold text-success">@Model.CompletedAppointments</div>
-            </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#e9f7ef; color:#27ae60;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" style="color: var(--color-success);">@Model.CompletedAppointments</div>
     </div>
 
-    <!-- Cancelled Appointments Card -->
-    <div class="col-md-3">
-        <div class="card border-start border-danger border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">Cancelled</div>
-                <div class="h3 mb-0 fw-bold text-danger">@Model.CancelledAppointments</div>
-            </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#fce4e1; color:#c0392b;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
         </div>
+        <div class="stat-label">Cancelled</div>
+        <div class="stat-value" style="color: var(--color-danger);">@Model.CancelledAppointments</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#fef5e7; color:#d4ac0d;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        </div>
+        <div class="stat-label">Today</div>
+        <div class="stat-value" style="color: var(--color-warning);">@Model.TodayAppointments</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#eee; color:#666;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-label">Staff Members</div>
+        <div class="stat-value">@Model.ActiveStaff</div>
+        <div class="stat-sub">of @Model.TotalStaff total</div>
     </div>
 </div>
 
-<!-- Row 2: Today's Appointments, Staff, and User Stats -->
-<div class="row g-3 mb-4">
-    <!-- Today's Appointments Card -->
-    <div class="col-md-4">
-        <div class="card border-start border-warning border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">Today's Appointments</div>
-                <div class="h3 mb-0 fw-bold text-warning">@Model.TodayAppointments</div>
-            </div>
-        </div>
+<!-- Recent Appointments -->
+<div class="card-custom">
+    <div class="card-header-custom">
+        <h2>Recent Appointments</h2>
+        <a asp-controller="Appointments" asp-action="Index" class="btn-secondary-custom btn-sm-custom">View All</a>
     </div>
 
-    <!-- Staff Stats Card -->
-    <div class="col-md-4">
-        <div class="card border-start border-secondary border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">Staff Members</div>
-                <div class="h3 mb-0 fw-bold">@Model.ActiveStaff <span class="text-muted fs-6">/ @Model.TotalStaff total</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- User Stats Card -->
-    <div class="col-md-4">
-        <div class="card border-start border-dark border-4 shadow-sm h-100">
-            <div class="card-body">
-                <div class="text-muted small text-uppercase mb-1">System Users</div>
-                <div class="h3 mb-0 fw-bold">@Model.ActiveUsers <span class="text-muted fs-6">/ @Model.TotalUsers total</span></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Row 3: Recent Appointments Table -->
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">Recent Appointments</h5>
-            </div>
-            <div class="card-body p-0">
-                @if (Model.RecentAppointments.Any())
+    @if (Model.RecentAppointments.Any())
+    {
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Staff</th>
+                    <th>Date &amp; Time</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appt in Model.RecentAppointments)
                 {
-                    <!-- Table showing the 5 most recent appointments -->
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Client Name</th>
-                                <th>Staff</th>
-                                <th>Start Time</th>
-                                <th>Duration</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var appointment in Model.RecentAppointments)
-                            {
-                                <tr>
-                                    <td>@appointment.ClientName</td>
-                                    <td>@appointment.Staff?.FullName</td>
-                                    <td>@appointment.StartTime.ToString("MMM dd, yyyy hh:mm tt")</td>
-                                    <td>@appointment.DurationMinutes min</td>
-                                    <td>
-                                        @* Color-code the status badge based on the appointment's current state *@
-                                        @{
-                                            var badgeClass = appointment.Status switch
-                                            {
-                                                "Scheduled" => "bg-info",
-                                                "Completed" => "bg-success",
-                                                "Cancelled" => "bg-danger",
-                                                "No-Show" => "bg-warning text-dark",
-                                                _ => "bg-secondary"
-                                            };
-                                        }
-                                        <span class="badge @badgeClass">@appointment.Status</span>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    var cls = appt.Status switch
+                    {
+                        "Scheduled" => "badge-scheduled",
+                        "Completed" => "badge-completed",
+                        "Cancelled" => "badge-cancelled",
+                        "No-Show"   => "badge-noshow",
+                        _           => "badge-default"
+                    };
+                    <tr>
+                        <td style="font-weight:500;">@appt.ClientName</td>
+                        <td>@appt.Staff?.FullName</td>
+                        <td>@appt.StartTime.ToString("MMM dd, yyyy  h:mm tt")</td>
+                        <td>@appt.DurationMinutes min</td>
+                        <td><span class="badge-status @cls">@appt.Status</span></td>
+                    </tr>
                 }
-                else
-                {
-                    <!-- Show a friendly message if there are no appointments yet -->
-                    <div class="text-center py-4 text-muted">
-                        <p class="mb-0">No appointments found. Create your first appointment to get started!</p>
-                    </div>
-                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
-            @if (Model.RecentAppointments.Any())
-            {
-                <!-- Link to see all appointments -->
-                <div class="card-footer bg-white text-end">
-                    <a asp-controller="Appointments" asp-action="Index" class="btn btn-sm btn-outline-primary">
-                        View All Appointments
-                    </a>
-                </div>
-            }
+            <h3>No appointments yet</h3>
+            <p>Create your first appointment to see it here.</p>
+            <a asp-controller="Appointments" asp-action="Create" class="btn-primary-custom btn-sm-custom">Create Appointment</a>
         </div>
-    </div>
+    }
 </div>

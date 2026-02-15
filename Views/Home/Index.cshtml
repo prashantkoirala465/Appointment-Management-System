@@ -1,18 +1,21 @@
 @{
-    // Set the page title that appears in the browser tab
     ViewData["Title"] = "Home";
 }
 
-<!-- Main homepage content - centered and welcoming -->
-<div class="text-center">
-    <!-- Large heading to welcome users -->
-    <h1 class="display-4">Appointment Management System</h1>
-    
-    <!-- Subtitle with brief instructions -->
-    <p class="lead">Manage your appointments, staff, and users with ease.</p>
-    
-    <!-- Call-to-action button to log in -->
-    <div class="mt-4">
-        <a class="btn btn-primary btn-lg" asp-controller="Account" asp-action="Login">Sign In to Get Started</a>
+<div class="landing-page">
+    <div class="landing-content">
+        <div class="landing-badge">Appointment Management System</div>
+        <h1 class="landing-title">Schedule. Manage.<br/>Simplify.</h1>
+        <p class="landing-desc">
+            A clean, modern platform to manage appointments, staff, and users.
+            Built for teams that value clarity over clutter.
+        </p>
+        <a class="landing-cta" asp-controller="Account" asp-action="Login">
+            Sign In
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
     </div>
+    <footer class="footer-public">
+        &copy; 2026 AppointmentSystem
+    </footer>
 </div>

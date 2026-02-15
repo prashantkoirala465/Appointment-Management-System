@@ -136,8 +136,6 @@
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/rjsmrazor.dswa.cache.json
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/scopedcss/bundle/AppointmentSystem.Web.styles.css
-/Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/compressed/u9kouh6z45-{0}-aqa5fk84k5-aqa5fk84k5.gz
-/Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/compressed/1vpc7rmlu8-{0}-9igrthva9p-9igrthva9p.gz
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/staticwebassets.build.json
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/staticwebassets.build.json.cache
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/staticwebassets.development.json
@@ -149,3 +147,5 @@
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/AppointmentSystem.Web.pdb
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/AppointmentSystem.Web.genruntimeconfig.cache
 /Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/ref/AppointmentSystem.Web.dll
+/Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/compressed/u9kouh6z45-{0}-k1bypnq25b-k1bypnq25b.gz
+/Users/prashantkoirala/Desktop/AppointmentManagementSystem/AppointmentSystem.Web/obj/Debug/net10.0/compressed/1vpc7rmlu8-{0}-wnesyqv9w2-wnesyqv9w2.gz

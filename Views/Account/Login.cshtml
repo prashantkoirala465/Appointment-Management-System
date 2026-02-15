@@ -1,48 +1,43 @@
 @model AppointmentSystem.Web.Models.LoginViewModel
 @{
-    // Set the page title that appears in the browser tab
     ViewData["Title"] = "Login";
 }
 
-<!-- Login page - centered card layout for a clean, professional look -->
-<div class="row justify-content-center mt-5">
-    <div class="col-md-5">
-        <div class="card shadow">
-            <div class="card-body p-4">
-                <!-- Page heading -->
-                <h2 class="card-title text-center mb-4">Login</h2>
-                <p class="text-center text-muted mb-4">Sign in to access the Appointment Management System</p>
-
-                <!-- Display validation errors (like "Invalid username or password") -->
-                <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
-                <!-- Login form - POST to /Account/Login -->
-                <form asp-action="Login" method="post">
-                    <!-- Username field -->
-                    <div class="mb-3">
-                        <label asp-for="Username" class="form-label"></label>
-                        <input asp-for="Username" class="form-control" placeholder="Enter your username" />
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div>
-
-                    <!-- Password field -->
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label"></label>
-                        <input asp-for="Password" class="form-control" placeholder="Enter your password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-
-                    <!-- Submit button - full width for emphasis -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Sign In</button>
-                    </div>
-                </form>
-            </div>
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-logo">
+            AppointmentSystem
+            <span>Management Platform</span>
         </div>
+
+        <h1 class="login-title">Welcome back</h1>
+        <p class="login-subtitle">Enter your credentials to access the dashboard.</p>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="login-error">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
+
+        <form asp-action="Login" method="post" class="form-custom">
+            <div class="form-group">
+                <label asp-for="Username">Username</label>
+                <input asp-for="Username" class="form-input" placeholder="e.g. admin" autocomplete="username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" class="form-input" placeholder="Enter your password" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-primary-custom" style="width:100%; justify-content:center; padding:12px;">Sign In</button>
+        </form>
     </div>
 </div>
 
-<!-- Include client-side validation scripts so users get instant feedback -->
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

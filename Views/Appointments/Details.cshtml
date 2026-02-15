@@ -1,41 +1,52 @@
 @model AppointmentSystem.Web.Models.Appointment
-
 @{
     ViewData["Title"] = "Appointment Details";
+    var cls = Model.Status switch
+    {
+        "Scheduled" => "badge-scheduled",
+        "Completed" => "badge-completed",
+        "Cancelled" => "badge-cancelled",
+        "No-Show"   => "badge-noshow",
+        _           => "badge-default"
+    };
 }
 
-<h1>Appointment Details</h1>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">Staff</dt>
-        <dd class="col-sm-9">@Model.Staff?.FullName</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ClientName)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(m => m.ClientName)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ClientEmail)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(m => m.ClientEmail)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ClientPhone)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(m => m.ClientPhone)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.StartTime)</dt>
-        <dd class="col-sm-9">@Model.StartTime.ToString("yyyy-MM-dd HH:mm")</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DurationMinutes)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(m => m.DurationMinutes) minutes</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Status)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(m => m.Status)</dd>
-
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Notes)</dt>
-        <dd class="col-sm-9">@Html.DisplayFor(m => m.Notes)</dd>
-    </dl>
+<div style="margin-bottom: var(--space-xl);">
+    <h1 class="page-title">Appointment Details</h1>
+    <p class="page-subtitle">Viewing appointment for @Model.ClientName.</p>
 </div>
 
-<div class="mt-3">
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+<div class="card-custom" style="max-width:640px;">
+    <div class="card-body-custom">
+        <dl class="detail-grid">
+            <dt>Staff</dt>
+            <dd>@(Model.Staff?.FullName ?? "—")</dd>
+
+            <dt>Client Name</dt>
+            <dd>@Model.ClientName</dd>
+
+            <dt>Email</dt>
+            <dd>@(Model.ClientEmail ?? "—")</dd>
+
+            <dt>Phone</dt>
+            <dd>@(Model.ClientPhone ?? "—")</dd>
+
+            <dt>Start Time</dt>
+            <dd>@Model.StartTime.ToString("MMM dd, yyyy  h:mm tt")</dd>
+
+            <dt>Duration</dt>
+            <dd>@Model.DurationMinutes minutes</dd>
+
+            <dt>Status</dt>
+            <dd><span class="badge-status @cls">@Model.Status</span></dd>
+
+            <dt>Notes</dt>
+            <dd>@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</dd>
+        </dl>
+
+        <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+            <a class="btn-primary-custom" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn-secondary-custom" asp-action="Index">Back to List</a>
+        </div>
+    </div>
 </div>
