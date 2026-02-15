@@ -1,13 +1,25 @@
 // These are the essential packages we need to run our appointment management system
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using AppointmentSystem.Web.Data;
+using AppointmentSystem.Web.Filters;
 
 // This creates a new web application builder - think of it as the foundation of our app
 var builder = WebApplication.CreateBuilder(args);
 
 // Here we're telling ASP.NET Core to use MVC (Model-View-Controller) pattern
 // This lets us organize our code into models (data), views (UI), and controllers (logic)
-builder.Services.AddControllersWithViews();
+// We also add a global filter that loads user-specific menus for the navigation bar
+builder.Services.AddControllersWithViews(options =>
+{
+    // Add the MenuLoaderFilter globally so it runs before every action
+    // This ensures the navigation bar always has the correct menus for the logged-in user
+    options.Filters.AddService<MenuLoaderFilter>();
+});
+
+// Register the MenuLoaderFilter with dependency injection
+// It needs the database context, so we register it as scoped (one instance per request)
+builder.Services.AddScoped<MenuLoaderFilter>();
 
 // Setting up our database connection here
 // We're using SQLite because it's lightweight and doesn't require a separate database server
@@ -15,8 +27,36 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AppointmentSystem")));
 
+// Setting up cookie-based authentication
+// When a user logs in, a secure cookie is created in their browser
+// This cookie is sent with every request so the server knows who the user is
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        // If a user tries to access a protected page without being logged in,
+        // they get redirected to the login page
+        options.LoginPath = "/Account/Login";
+
+        // If a logged-in user tries to access something they don't have permission for,
+        // they get redirected to this access denied page
+        options.AccessDeniedPath = "/Account/AccessDenied";
+
+        // The cookie expires after 30 minutes of inactivity
+        // After that, the user needs to log in again
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
+
 // Now we build the app with all the services we configured above
 var app = builder.Build();
+
+// Seed the database with default data (roles, users, menus)
+// This runs at startup and only creates data if it doesn't already exist
+// It ensures we always have at least one admin user who can log in
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DbSeeder.SeedAsync(context);
+}
 
 // This section configures how our app behaves when handling web requests
 // We have different settings for development vs production environments
@@ -40,8 +80,12 @@ app.UseStaticFiles();
 // Enable routing so the app knows which controller action to call based on the URL
 app.UseRouting();
 
-// Enable authorization checks (even though we're not using authentication yet)
-// It's good to have this in place for future expansion
+// Enable authentication - this reads the cookie and creates a user identity
+// Must come before authorization so we know WHO the user is before checking WHAT they can do
+app.UseAuthentication();
+
+// Enable authorization checks - this checks if the authenticated user has permission
+// to access the requested resource (based on roles, policies, etc.)
 app.UseAuthorization();
 
 // This is our default routing pattern
@@ -53,4 +97,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Finally, start the web server and listen for incoming requests!
-app.Run();
+await app.RunAsync();

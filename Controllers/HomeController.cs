@@ -22,9 +22,14 @@ namespace AppointmentSystem.Web.Controllers
 
         // This is the homepage action - what users see when they first visit our site
         // URL: / or /Home or /Home/Index
-        // Returns the Index.cshtml view
+        // If the user is already logged in, redirect them to the Dashboard for a better experience
+        // Otherwise, show the homepage with a welcome message and login option
         public IActionResult Index()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
             return View();
         }
 

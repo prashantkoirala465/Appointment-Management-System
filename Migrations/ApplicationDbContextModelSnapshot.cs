@@ -15,7 +15,7 @@ namespace AppointmentSystem.Web.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.23");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
             modelBuilder.Entity("AppointmentSystem.Web.Models.Appointment", b =>
                 {
@@ -68,6 +68,61 @@ namespace AppointmentSystem.Web.Migrations
                     b.ToTable("Appointments");
                 });
 
+            modelBuilder.Entity("AppointmentSystem.Web.Models.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MenuName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisplayOrder");
+
+                    b.ToTable("Menus", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleName")
+                        .IsUnique();
+
+                    b.ToTable("Roles", (string)null);
+                });
+
             modelBuilder.Entity("AppointmentSystem.Web.Models.Staff", b =>
                 {
                     b.Property<Guid>("Id")
@@ -103,6 +158,91 @@ namespace AppointmentSystem.Web.Migrations
                     b.ToTable("Staffs", (string)null);
                 });
 
+            modelBuilder.Entity("AppointmentSystem.Web.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.UserMenu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("UserId", "MenuId")
+                        .IsUnique();
+
+                    b.ToTable("UserMenus", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.UserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId", "RoleId")
+                        .IsUnique();
+
+                    b.ToTable("UserRoles", (string)null);
+                });
+
             modelBuilder.Entity("AppointmentSystem.Web.Models.Appointment", b =>
                 {
                     b.HasOne("AppointmentSystem.Web.Models.Staff", "Staff")
@@ -114,9 +254,64 @@ namespace AppointmentSystem.Web.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("AppointmentSystem.Web.Models.UserMenu", b =>
+                {
+                    b.HasOne("AppointmentSystem.Web.Models.Menu", "Menu")
+                        .WithMany("UserMenus")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentSystem.Web.Models.User", "User")
+                        .WithMany("UserMenus")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.UserRole", b =>
+                {
+                    b.HasOne("AppointmentSystem.Web.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppointmentSystem.Web.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.Menu", b =>
+                {
+                    b.Navigation("UserMenus");
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("AppointmentSystem.Web.Models.Staff", b =>
                 {
                     b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("AppointmentSystem.Web.Models.User", b =>
+                {
+                    b.Navigation("UserMenus");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

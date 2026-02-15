@@ -1,0 +1,154 @@
+@model AppointmentSystem.Web.Models.DashboardViewModel
+@{
+    // Set the page title that appears in the browser tab
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Dashboard heading -->
+<h1 class="mb-4">Dashboard</h1>
+<p class="text-muted mb-4">Welcome back! Here's an overview of your Appointment Management System.</p>
+
+<!-- Row 1: Appointment Statistics Cards -->
+<div class="row g-3 mb-4">
+    <!-- Total Appointments Card -->
+    <div class="col-md-3">
+        <div class="card border-start border-primary border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">Total Appointments</div>
+                <div class="h3 mb-0 fw-bold">@Model.TotalAppointments</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheduled Appointments Card -->
+    <div class="col-md-3">
+        <div class="card border-start border-info border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">Scheduled</div>
+                <div class="h3 mb-0 fw-bold text-info">@Model.ScheduledAppointments</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completed Appointments Card -->
+    <div class="col-md-3">
+        <div class="card border-start border-success border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">Completed</div>
+                <div class="h3 mb-0 fw-bold text-success">@Model.CompletedAppointments</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancelled Appointments Card -->
+    <div class="col-md-3">
+        <div class="card border-start border-danger border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">Cancelled</div>
+                <div class="h3 mb-0 fw-bold text-danger">@Model.CancelledAppointments</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 2: Today's Appointments, Staff, and User Stats -->
+<div class="row g-3 mb-4">
+    <!-- Today's Appointments Card -->
+    <div class="col-md-4">
+        <div class="card border-start border-warning border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">Today's Appointments</div>
+                <div class="h3 mb-0 fw-bold text-warning">@Model.TodayAppointments</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Stats Card -->
+    <div class="col-md-4">
+        <div class="card border-start border-secondary border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">Staff Members</div>
+                <div class="h3 mb-0 fw-bold">@Model.ActiveStaff <span class="text-muted fs-6">/ @Model.TotalStaff total</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Stats Card -->
+    <div class="col-md-4">
+        <div class="card border-start border-dark border-4 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase mb-1">System Users</div>
+                <div class="h3 mb-0 fw-bold">@Model.ActiveUsers <span class="text-muted fs-6">/ @Model.TotalUsers total</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 3: Recent Appointments Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Recent Appointments</h5>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.RecentAppointments.Any())
+                {
+                    <!-- Table showing the 5 most recent appointments -->
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Staff</th>
+                                <th>Start Time</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var appointment in Model.RecentAppointments)
+                            {
+                                <tr>
+                                    <td>@appointment.ClientName</td>
+                                    <td>@appointment.Staff?.FullName</td>
+                                    <td>@appointment.StartTime.ToString("MMM dd, yyyy hh:mm tt")</td>
+                                    <td>@appointment.DurationMinutes min</td>
+                                    <td>
+                                        @* Color-code the status badge based on the appointment's current state *@
+                                        @{
+                                            var badgeClass = appointment.Status switch
+                                            {
+                                                "Scheduled" => "bg-info",
+                                                "Completed" => "bg-success",
+                                                "Cancelled" => "bg-danger",
+                                                "No-Show" => "bg-warning text-dark",
+                                                _ => "bg-secondary"
+                                            };
+                                        }
+                                        <span class="badge @badgeClass">@appointment.Status</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <!-- Show a friendly message if there are no appointments yet -->
+                    <div class="text-center py-4 text-muted">
+                        <p class="mb-0">No appointments found. Create your first appointment to get started!</p>
+                    </div>
+                }
+            </div>
+            @if (Model.RecentAppointments.Any())
+            {
+                <!-- Link to see all appointments -->
+                <div class="card-footer bg-white text-end">
+                    <a asp-controller="Appointments" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                        View All Appointments
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

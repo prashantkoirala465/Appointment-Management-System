@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AppointmentSystem.Web.Data;
@@ -8,6 +9,9 @@ namespace AppointmentSystem.Web.Controllers
     /// This controller manages all staff-related operations
     /// It handles viewing, creating, editing, and deleting staff members
     /// Think of it as the "Staff Management" section of our app
+    /// [Authorize] ensures only logged-in users can access these pages
+    /// Only users with the "Admin" role can create, edit, or delete staff members
+    [Authorize]
     public class StaffsController : Controller
     {
         // Our database context - this is how we talk to the database
@@ -68,6 +72,8 @@ namespace AppointmentSystem.Web.Controllers
         // GET: /Staffs/Create
         // Shows the form to create a new staff member
         // This just displays an empty form - no database work yet
+        // Only Admin users can create staff members
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -77,6 +83,7 @@ namespace AppointmentSystem.Web.Controllers
         // This handles the form submission when creating a new staff member
         // [HttpPost] means this only responds to POST requests (form submissions)
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken] // Security: prevents CSRF attacks
         public async Task<IActionResult> Create([Bind("Id,FullName,Email,PhoneNumber,Specialty,IsActive")] Staff staff)
         {
@@ -102,6 +109,8 @@ namespace AppointmentSystem.Web.Controllers
 
         // GET: /Staffs/Edit/5
         // Shows a form to edit an existing staff member
+        // Only Admin users can edit staff members
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             // Null check: can't edit a staff member without knowing which one
@@ -127,6 +136,7 @@ namespace AppointmentSystem.Web.Controllers
         // POST: /Staffs/Edit/5
         // Handles the form submission when updating a staff member
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken] // Security: prevents CSRF attacks
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,FullName,Email,PhoneNumber,Specialty,IsActive")] Staff staff)
         {
@@ -173,6 +183,8 @@ namespace AppointmentSystem.Web.Controllers
         // GET: /Staffs/Delete/5
         // Shows a confirmation page before deleting a staff member
         // We don't delete immediately - we ask "Are you sure?" first
+        // Only Admin users can delete staff members
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             // Can't delete without knowing which staff member
@@ -197,6 +209,7 @@ namespace AppointmentSystem.Web.Controllers
         // POST: /Staffs/Delete/5
         // Actually performs the deletion after user confirms
         [HttpPost, ActionName("Delete")] // ActionName("Delete") makes this respond to the Delete action
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken] // Security: prevents CSRF attacks
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {

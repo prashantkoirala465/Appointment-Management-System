@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppointmentSystem.Web.Data;
 using AppointmentSystem.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ namespace AppointmentSystem.Web.Controllers
     /// This controller manages everything related to appointments
     /// It's the heart of our appointment booking system
     /// Users can view, create, edit, and cancel appointments through this controller
+    /// [Authorize] ensures only logged-in users can access these pages
+    [Authorize]
     public class AppointmentsController : Controller
     {
         // Our connection to the database
