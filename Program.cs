@@ -49,13 +49,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Now we build the app with all the services we configured above
 var app = builder.Build();
 
-// Seed the database with default data (roles, users, menus)
-// This runs at startup and only creates data if it doesn't already exist
-// It ensures we always have at least one admin user who can log in
+// Apply pending migrations and seed the superadmin account + default roles/menus
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await DbSeeder.SeedAsync(context);
+    await context.Database.MigrateAsync();
+    await AppointmentSystem.Web.Data.DbSeeder.SeedAsync(context);
 }
 
 // This section configures how our app behaves when handling web requests

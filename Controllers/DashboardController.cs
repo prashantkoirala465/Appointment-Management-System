@@ -62,6 +62,7 @@ namespace AppointmentSystem.Web.Controllers
                 // --- User Statistics ---
                 TotalUsers = await _context.Users.CountAsync(),
                 ActiveUsers = await _context.Users.CountAsync(u => u.IsActive),
+                PendingApprovals = await _context.Users.CountAsync(u => !u.IsApproved),
 
                 // --- Recent Activity ---
                 // Get the 5 most recent appointments with their staff member info

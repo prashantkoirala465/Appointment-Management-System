@@ -1,0 +1,94 @@
+@model AppointmentSystem.Web.Models.UserFormViewModel
+@{
+    ViewData["Title"] = "Add User";
+}
+
+<div style="margin-bottom: var(--space-xl);">
+    <h1 class="page-title">Add User</h1>
+    <p class="page-subtitle">Create a new user account and assign roles and menus.</p>
+</div>
+
+<div class="card-custom" style="max-width:600px;">
+    <div class="card-body-custom">
+        <form asp-action="Create" class="form-custom">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="FullName">Full Name</label>
+                <input asp-for="FullName" class="form-input" placeholder="John Smith" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md);">
+                <div class="form-group">
+                    <label asp-for="Username">Username</label>
+                    <input asp-for="Username" class="form-input" placeholder="jsmith" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="form-input" placeholder="email@example.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" class="form-input" placeholder="At least 6 characters" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check-custom">
+                    <input asp-for="IsActive" />
+                    <label asp-for="IsActive">Active</label>
+                </div>
+            </div>
+
+            @if (Model.Roles.Any())
+            {
+                <div class="form-group">
+                    <label>Assign Roles</label>
+                    <div class="checkbox-group">
+                        @for (int i = 0; i < Model.Roles.Count; i++)
+                        {
+                            <input type="hidden" asp-for="Roles[i].RoleId" />
+                            <input type="hidden" asp-for="Roles[i].RoleName" />
+                            <label class="checkbox-item">
+                                <input type="checkbox" asp-for="Roles[i].IsSelected" />
+                                @Model.Roles[i].RoleName
+                            </label>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Menus.Any())
+            {
+                <div class="form-group">
+                    <label>Assign Menus</label>
+                    <div class="checkbox-group">
+                        @for (int i = 0; i < Model.Menus.Count; i++)
+                        {
+                            <input type="hidden" asp-for="Menus[i].MenuId" />
+                            <input type="hidden" asp-for="Menus[i].MenuName" />
+                            <label class="checkbox-item">
+                                <input type="checkbox" asp-for="Menus[i].IsSelected" />
+                                @Model.Menus[i].MenuName
+                            </label>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+                <button type="submit" class="btn-primary-custom">Create User</button>
+                <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -11,134 +11,171 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Web.Controllers
 {
-    /// This controller handles user authentication - logging in and logging out
-    /// It uses cookie-based authentication, which is a simple and effective approach for MVC apps
-    /// When a user logs in, a secure cookie is set in their browser to track their session
+    /// Handles authentication — login, registration (staff only), and logout
+    /// Staff must be approved by the admin before they can log in
     public class AccountController : Controller
     {
-        // Our database context - used to look up users and verify credentials
         private readonly ApplicationDbContext _context;
 
-        // Constructor: ASP.NET Core injects the database context automatically
         public AccountController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: /Account/Login
-        // Shows the login form to the user
-        // If the user is already logged in, redirect them to the homepage
         public IActionResult Login()
         {
-            // If user is already authenticated, no need to show login page
             if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
                 return RedirectToAction("Index", "Home");
-            }
 
             return View();
         }
 
         // POST: /Account/Login
-        // Processes the login form submission
-        // Validates the username and password against the database
         [HttpPost]
-        [ValidateAntiForgeryToken] // Security: prevents cross-site request forgery attacks
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            // Check if the form data is valid (required fields filled, etc.)
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            // Look up the user by username in the database
-            // We also load their roles through the UserRole junction table
             var user = await _context.Users
                 .Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Username == model.Username && u.IsActive);
 
-            // If user not found or password doesn't match, show an error
-            // We use a generic message to avoid revealing whether the username exists (security best practice)
             if (user == null || !VerifyPassword(model.Password, user.PasswordHash))
             {
                 ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 return View(model);
             }
 
-            // Authentication successful! Now create the claims for the cookie
-            // Claims are pieces of information about the user that get stored in the cookie
+            // Check if the user has been approved by an admin
+            if (!user.IsApproved)
+            {
+                ModelState.AddModelError(string.Empty, "Your account is pending approval. Please wait for the administrator to verify your registration.");
+                return View(model);
+            }
+
+            // Build claims
             var claims = new List<Claim>
             {
-                // Store the user's unique ID so we can look them up later
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                // Store the username for display purposes
                 new Claim(ClaimTypes.Name, user.Username),
-                // Store the full name for display in the UI
                 new Claim("FullName", user.FullName)
             };
 
-            // Add each of the user's roles as a claim
-            // This lets us use [Authorize(Roles = "Admin")] on controllers and actions
             foreach (var userRole in user.UserRoles)
             {
                 if (userRole.Role != null)
-                {
                     claims.Add(new Claim(ClaimTypes.Role, userRole.Role.RoleName));
-                }
             }
 
-            // Create a claims identity with the cookie authentication scheme
-            // This bundles all claims together into a single identity
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Create a claims principal (represents the authenticated user)
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            // Actually sign the user in by creating the authentication cookie
-            // The cookie will be sent with every subsequent request so we know who the user is
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                claimsPrincipal);
+                new ClaimsPrincipal(claimsIdentity));
 
-            // Success! Redirect to the homepage
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: /Account/Logout
-        // Logs the user out by deleting their authentication cookie
+        // GET: /Account/Register
+        // Staff registration — not for admin accounts
+        public IActionResult Register()
+        {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            return View();
+        }
+
+        // POST: /Account/Register
+        // Creates a new staff account with IsApproved = false
+        // The admin must approve it before the user can log in
         [HttpPost]
-        [ValidateAntiForgeryToken] // Security: prevents CSRF attacks
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            if (await _context.Users.AnyAsync(u => u.Username == model.Username))
+            {
+                ModelState.AddModelError("Username", "This username is already taken.");
+                return View(model);
+            }
+
+            // Create user — NOT approved yet, must wait for admin verification
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                FullName = model.FullName,
+                Username = model.Username,
+                Email = model.Email,
+                PasswordHash = HashPassword(model.Password),
+                IsActive = true,
+                IsApproved = false, // Pending admin approval
+                CreatedAtUtc = DateTime.UtcNow
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Assign the "Staff" role automatically
+            var staffRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Staff");
+            if (staffRole != null)
+            {
+                _context.UserRoles.Add(new UserRole
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = user.Id,
+                    RoleId = staffRole.Id
+                });
+            }
+
+            // Give them the Appointments menu by default (they can get more after approval)
+            var appointmentsMenu = await _context.Menus.FirstOrDefaultAsync(m => m.MenuName == "Appointments");
+            if (appointmentsMenu != null)
+            {
+                _context.UserMenus.Add(new UserMenu
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = user.Id,
+                    MenuId = appointmentsMenu.Id
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Don't sign them in — show a pending approval page instead
+            return RedirectToAction(nameof(RegistrationPending));
+        }
+
+        // GET: /Account/RegistrationPending
+        // Shown after a staff member registers — tells them to wait for admin approval
+        public IActionResult RegistrationPending()
+        {
+            return View();
+        }
+
+        // POST: /Account/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // Remove the authentication cookie - this effectively logs the user out
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Redirect to the login page after logging out
             return RedirectToAction(nameof(Login));
         }
 
         // GET: /Account/AccessDenied
-        // Shows a friendly page when a user tries to access something they don't have permission for
-        // For example, if a "Staff" user tries to access an "Admin-only" page
         public IActionResult AccessDenied()
         {
             return View();
         }
 
-        // Helper method to verify a password against its hash
-        // We use a simple hash comparison here
-        // In a production app, you'd use BCrypt or similar, but this keeps things simple for learning
         private bool VerifyPassword(string password, string storedHash)
         {
-            // Hash the provided password and compare it to the stored hash
             return HashPassword(password) == storedHash;
         }
 
-        // Helper method to hash a password
-        // Uses SHA256 for simplicity in this educational project
-        // In production, you'd want to use BCrypt, Argon2, or PBKDF2 instead
         public static string HashPassword(string password)
         {
             using var sha256 = System.Security.Cryptography.SHA256.Create();

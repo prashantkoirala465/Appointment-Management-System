@@ -1722,6 +1722,43 @@ h1,h2,h3,h4,h5,h6 { margin: 0; }
   padding-right: 36px;
 }
 
+/* ───── Checkbox Groups (role/menu assignment) ───── */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.checkbox-group .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-sm);
+  font-weight: 400;
+  transition: border-color .2s, background .2s;
+  margin-bottom: 0;
+}
+
+.checkbox-group .checkbox-item:hover {
+  border-color: var(--color-accent);
+}
+
+.checkbox-group .checkbox-item:has(input:checked) {
+  background: rgba(45,106,79,.06);
+  border-color: var(--color-accent);
+}
+
+.checkbox-group .checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
 /* ───── Detail Grids ───── */
 .detail-grid {
   display: grid;

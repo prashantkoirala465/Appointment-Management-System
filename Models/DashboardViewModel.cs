@@ -50,6 +50,10 @@ namespace AppointmentSystem.Web.Models
         [DisplayName("Active Users")]
         public int ActiveUsers { get; set; }
 
+        // Users who registered but haven't been approved yet
+        [DisplayName("Pending Approvals")]
+        public int PendingApprovals { get; set; }
+
         // --- Recent Activity ---
 
         // The most recent appointments for quick reference

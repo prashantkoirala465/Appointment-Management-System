@@ -1,0 +1,52 @@
+@model AppointmentSystem.Web.Models.Menu
+@{
+    ViewData["Title"] = "Add Menu";
+}
+
+<div style="margin-bottom: var(--space-xl);">
+    <h1 class="page-title">Add Menu</h1>
+    <p class="page-subtitle">Create a new navigation menu item.</p>
+</div>
+
+<div class="card-custom" style="max-width:540px;">
+    <div class="card-body-custom">
+        <form asp-action="Create" class="form-custom">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="MenuName">Menu Name</label>
+                <input asp-for="MenuName" class="form-input" placeholder="e.g. Reports" />
+                <span asp-validation-for="MenuName" class="text-danger"></span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:2fr 1fr; gap:var(--space-md);">
+                <div class="form-group">
+                    <label asp-for="Url">URL</label>
+                    <input asp-for="Url" class="form-input" placeholder="/Reports" />
+                    <span asp-validation-for="Url" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DisplayOrder">Display Order</label>
+                    <input asp-for="DisplayOrder" class="form-input" type="number" />
+                    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check-custom">
+                    <input asp-for="IsActive" />
+                    <label asp-for="IsActive">Active</label>
+                </div>
+            </div>
+
+            <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+                <button type="submit" class="btn-primary-custom">Create Menu</button>
+                <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

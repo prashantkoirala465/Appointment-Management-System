@@ -1,0 +1,77 @@
+@model IEnumerable<AppointmentSystem.Web.Models.Menu>
+@{
+    ViewData["Title"] = "Menus";
+}
+
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-xl); flex-wrap:wrap; gap:var(--space-md);">
+    <div>
+        <h1 class="page-title">Menus</h1>
+        <p class="page-subtitle">Manage navigation items and their visibility per user.</p>
+    </div>
+    <a class="btn-primary-custom" asp-action="Create">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Menu
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="card-custom">
+        <div class="table-scroll-wrapper">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Menu Name</th>
+                    <th>URL</th>
+                    <th>Users</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.DisplayOrder</td>
+                        <td style="font-weight:500;">@item.MenuName</td>
+                        <td><code style="font-size:var(--font-xs); background:var(--color-bg); padding:2px 6px; border-radius:var(--radius-sm);">@item.Url</code></td>
+                        <td>
+                            <span class="badge-status badge-default">@item.UserMenus.Count assigned</span>
+                        </td>
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <span class="badge-status badge-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-inactive">Inactive</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="action-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card-custom">
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </div>
+            <h3>No menus yet</h3>
+            <p>Create menu items to build your navigation.</p>
+            <a asp-action="Create" class="btn-primary-custom btn-sm-custom">Add Menu</a>
+        </div>
+    </div>
+}

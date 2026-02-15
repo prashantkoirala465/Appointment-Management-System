@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppointmentSystem.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260215090129_AddAuthAndMenuTables")]
-    partial class AddAuthAndMenuTables
+    [Migration("20260215135242_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,6 +180,9 @@ namespace AppointmentSystem.Web.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PasswordHash")

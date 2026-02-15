@@ -44,6 +44,13 @@ namespace AppointmentSystem.Web.Models
         [DisplayName("Active")]
         public bool IsActive { get; set; } = true;
 
+        // Has this user been approved by an admin?
+        // Staff who register through the signup form start as unapproved
+        // The admin must verify them before they can log in
+        // Seeded admin accounts are automatically approved
+        [DisplayName("Approved")]
+        public bool IsApproved { get; set; } = false;
+
         // When was this user account created?
         // Automatically set to current UTC time when the user is created
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;

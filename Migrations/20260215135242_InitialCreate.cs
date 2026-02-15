@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppointmentSystem.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAuthAndMenuTables : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,22 @@ namespace AppointmentSystem.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Staffs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FullName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
+                    Specialty = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staffs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -50,11 +66,39 @@ namespace AppointmentSystem.Web.Migrations
                     Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
                     PasswordHash = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsApproved = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    StaffId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ClientName = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
+                    ClientEmail = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
+                    ClientPhone = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
+                    StartTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DurationMinutes = table.Column<int>(type: "INTEGER", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Notes = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Staffs_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "Staffs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,6 +152,11 @@ namespace AppointmentSystem.Web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Appointments_StaffId",
+                table: "Appointments",
+                column: "StaffId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Menus_DisplayOrder",
                 table: "Menus",
                 column: "DisplayOrder");
@@ -117,6 +166,16 @@ namespace AppointmentSystem.Web.Migrations
                 table: "Roles",
                 column: "RoleName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Staffs_Email",
+                table: "Staffs",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Staffs_FullName",
+                table: "Staffs",
+                column: "FullName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserMenus_MenuId",
@@ -156,10 +215,16 @@ namespace AppointmentSystem.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Appointments");
+
+            migrationBuilder.DropTable(
                 name: "UserMenus");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "Staffs");
 
             migrationBuilder.DropTable(
                 name: "Menus");

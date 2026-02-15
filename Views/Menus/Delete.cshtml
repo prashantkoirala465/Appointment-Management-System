@@ -1,0 +1,42 @@
+@model AppointmentSystem.Web.Models.Menu
+@{
+    ViewData["Title"] = "Delete Menu";
+}
+
+<div style="margin-bottom: var(--space-xl);">
+    <h1 class="page-title">Delete Menu</h1>
+    <p class="page-subtitle">This action cannot be undone.</p>
+</div>
+
+<div class="card-custom" style="max-width:540px;">
+    <div style="background:linear-gradient(135deg, #fce4e1 0%, #fff5f4 100%); padding:var(--space-xl); text-align:center;">
+        <div style="width:56px; height:56px; margin:0 auto var(--space-md); border-radius:var(--radius-full); background:#c0392b; display:flex; align-items:center; justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </div>
+        <h3 style="font-family:var(--font-serif); font-size:var(--font-lg); font-weight:500; margin-bottom:var(--space-xs);">Delete Menu Item?</h3>
+        <p style="font-size:var(--font-sm); color:#96281b;">This will remove the menu from all users' navigation.</p>
+    </div>
+    <div class="card-body-custom">
+        <dl class="detail-grid">
+            <dt>Menu Name</dt>
+            <dd>@Model.MenuName</dd>
+
+            <dt>URL</dt>
+            <dd>@Model.Url</dd>
+
+            <dt>Display Order</dt>
+            <dd>@Model.DisplayOrder</dd>
+
+            <dt>Assigned Users</dt>
+            <dd>@Model.UserMenus.Count</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+                <button type="submit" class="btn-danger-custom">Delete Permanently</button>
+                <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

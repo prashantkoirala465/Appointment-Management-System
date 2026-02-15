@@ -1,0 +1,107 @@
+@model IEnumerable<AppointmentSystem.Web.Models.User>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-xl); flex-wrap:wrap; gap:var(--space-md);">
+    <div>
+        <h1 class="page-title">Users</h1>
+        <p class="page-subtitle">Manage user accounts, roles, and menu access.</p>
+    </div>
+    <a class="btn-primary-custom" asp-action="Create">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add User
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="card-custom">
+        <div class="table-scroll-wrapper">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Roles</th>
+                    <th>Approval</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="font-weight:500;">@item.FullName</td>
+                        <td>@item.Username</td>
+                        <td>@(item.Email ?? "—")</td>
+                        <td>
+                            @if (item.UserRoles.Any())
+                            {
+                                @foreach (var ur in item.UserRoles)
+                                {
+                                    <span class="badge-status badge-active" style="margin-right:4px;">@ur.Role?.RoleName</span>
+                                }
+                            }
+                            else
+                            {
+                                <span style="color:var(--color-text-muted); font-size:var(--font-xs);">No roles</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsApproved)
+                            {
+                                <span class="badge-status badge-active">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-cancelled">Pending</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <span class="badge-status badge-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-inactive">Inactive</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                @if (!item.IsApproved)
+                                {
+                                    <form asp-action="Approve" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                        <button type="submit" class="btn-primary-custom btn-sm-custom" style="padding:4px 12px; font-size:var(--font-xs);">Approve</button>
+                                    </form>
+                                    <form asp-action="Reject" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('Reject and delete this user?');">
+                                        <button type="submit" class="btn-danger-custom btn-sm-custom" style="padding:4px 12px; font-size:var(--font-xs);">Reject</button>
+                                    </form>
+                                }
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="action-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card-custom">
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <h3>No users yet</h3>
+            <p>Create user accounts to manage access.</p>
+            <a asp-action="Create" class="btn-primary-custom btn-sm-custom">Add User</a>
+        </div>
+    </div>
+}

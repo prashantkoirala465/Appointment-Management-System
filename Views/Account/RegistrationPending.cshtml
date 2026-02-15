@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Registration Pending";
+}
+
+<div class="login-page">
+    <div class="login-wrapper">
+        <div class="login-card" style="text-align:center;">
+            <div class="login-logo">
+                appointra
+                <span>Scheduling Platform</span>
+            </div>
+
+            <div style="margin:var(--space-xl) 0;">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning, #d4ac0d)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+            </div>
+
+            <h1 class="login-title">Registration Submitted</h1>
+            <p class="login-subtitle" style="max-width:360px; margin:var(--space-sm) auto var(--space-xl);">
+                Your staff account has been created successfully. Please wait for an administrator to review and approve your registration before you can sign in.
+            </p>
+
+            <a asp-action="Login" class="btn-primary-custom" style="width:100%; justify-content:center; padding:12px;">
+                Back to Sign In
+            </a>
+        </div>
+    </div>
+</div>

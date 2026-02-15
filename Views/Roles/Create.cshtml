@@ -1,0 +1,45 @@
+@model AppointmentSystem.Web.Models.Role
+@{
+    ViewData["Title"] = "Add Role";
+}
+
+<div style="margin-bottom: var(--space-xl);">
+    <h1 class="page-title">Add Role</h1>
+    <p class="page-subtitle">Create a new role to control user access.</p>
+</div>
+
+<div class="card-custom" style="max-width:540px;">
+    <div class="card-body-custom">
+        <form asp-action="Create" class="form-custom">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="RoleName">Role Name</label>
+                <input asp-for="RoleName" class="form-input" placeholder="e.g. Manager" />
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <input asp-for="Description" class="form-input" placeholder="Brief description of this role's access level" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check-custom">
+                    <input asp-for="IsActive" />
+                    <label asp-for="IsActive">Active</label>
+                </div>
+            </div>
+
+            <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+                <button type="submit" class="btn-primary-custom">Create Role</button>
+                <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
