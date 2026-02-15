@@ -15,7 +15,7 @@ namespace AppointmentSystem.Web.Controllers.Api
     /// All operations restricted to Admin role
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "Admin")]
     [Produces("application/json")]
     public class UsersApiController : ControllerBase
     {

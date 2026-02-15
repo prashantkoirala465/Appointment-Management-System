@@ -1,7 +1,10 @@
 // These are the essential packages we need to run our appointment management system
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using System.Text;
 using AppointmentSystem.Web.Data;
 using AppointmentSystem.Web.Filters;
 
@@ -31,6 +34,26 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "REST API for the Appointra Appointment Management System. " +
                       "Provides endpoints for managing appointments, staff, users, roles, and menus."
+    });
+
+    // Add JWT Bearer token support to Swagger UI
+    // This adds an "Authorize" button where users can paste their JWT token
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token. Example: eyJhbGciOiJIUzI1NiIs..."
+    });
+
+    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer", doc, null),
+            new List<string>()
+        }
     });
 });
 
@@ -94,7 +117,44 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         // Request email and profile scopes so we get the user's name and email
         options.Scope.Add("email");
         options.Scope.Add("profile");
+    })
+    // Add JWT Bearer authentication for API consumers
+    // This allows mobile apps, SPAs, and other clients to authenticate with a token
+    // instead of cookies — the standard approach for REST APIs
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        var jwtKey = builder.Configuration["Authentication:Jwt:Key"]!;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Authentication:Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
     });
+
+// Set up authorization policies so API controllers accept BOTH cookie and JWT auth
+// This means the same API endpoint works whether you send a cookie or a Bearer token
+builder.Services.AddAuthorization(options =>
+{
+    // The default policy requires authentication via either Cookie or JWT Bearer
+    options.DefaultPolicy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder(
+        CookieAuthenticationDefaults.AuthenticationScheme,
+        JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+
+    // Admin policy: must be authenticated via either scheme AND have the Admin role
+    options.AddPolicy("Admin", policy =>
+        policy.AddAuthenticationSchemes(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                JwtBearerDefaults.AuthenticationScheme)
+            .RequireAuthenticatedUser()
+            .RequireRole("Admin"));
+});
 
 // Now we build the app with all the services we configured above
 var app = builder.Build();

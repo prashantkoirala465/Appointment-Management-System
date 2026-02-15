@@ -206,6 +206,12 @@ namespace AppointmentSystem.Web.Models.Api
         public string FullName { get; set; } = string.Empty;
         public List<string> Roles { get; set; } = new();
         public string Message { get; set; } = string.Empty;
+
+        /// JWT token for API authentication (only returned on login)
+        public string? Token { get; set; }
+
+        /// Token expiration time in UTC
+        public DateTime? ExpiresAt { get; set; }
     }
 
     // ══════════════════════════════════════════════════════════

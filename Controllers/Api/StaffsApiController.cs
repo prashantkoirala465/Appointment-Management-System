@@ -78,7 +78,7 @@ namespace AppointmentSystem.Web.Controllers.Api
         /// POST: api/staffsapi
         /// Creates a new staff member (Admin only)
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(typeof(StaffDto), 201)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<StaffDto>> Create([FromBody] StaffCreateDto dto)
@@ -115,7 +115,7 @@ namespace AppointmentSystem.Web.Controllers.Api
         /// PUT: api/staffsapi/{id}
         /// Updates an existing staff member (Admin only)
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(typeof(StaffDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -153,7 +153,7 @@ namespace AppointmentSystem.Web.Controllers.Api
         /// Deletes a staff member (Admin only)
         /// Soft-deletes if the staff has appointments, hard-deletes otherwise
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(Guid id)
