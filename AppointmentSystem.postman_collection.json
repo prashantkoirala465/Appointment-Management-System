@@ -1,0 +1,697 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Appointment Management System API",
+    "description": "Complete CRUD API collection for the Appointment Management System.\n\n**How to use:**\n1. Run the **Auth → Login** request first.\n2. The JWT token is automatically saved to the `token` collection variable.\n3. All subsequent requests use that token via the collection-level Bearer auth.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5090",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staffId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appointmentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "roleId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "menuId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "    console.log('Token saved:', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/authapi/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "authapi", "login"]
+            },
+            "description": "Authenticates a user and returns a JWT token. The test script automatically saves the token to the `token` collection variable so all other requests are authenticated."
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/authapi/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "authapi", "me"]
+            },
+            "description": "Returns details about the currently authenticated user."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/authapi/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "authapi", "logout"]
+            },
+            "description": "Clears the session cookie. Note: JWT tokens expire naturally and cannot be server-side revoked."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Staffs",
+      "description": "CRUD operations for staff members. GET endpoints require any authenticated user; POST, PUT, DELETE require Admin role.",
+      "item": [
+        {
+          "name": "Get All Staffs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.length > 0) {",
+                  "        pm.collectionVariables.set('staffId', json[0].id);",
+                  "        console.log('staffId set to:', json[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/staffsapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "staffsapi"]
+            },
+            "description": "Returns all staff members with their appointment counts. Also auto-saves the first staff ID into the `staffId` variable."
+          }
+        },
+        {
+          "name": "Get Staff by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/staffsapi/{{staffId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "staffsapi", "{{staffId}}"]
+            },
+            "description": "Returns a single staff member by their GUID. Uses the `staffId` variable saved from Get All Staffs."
+          }
+        },
+        {
+          "name": "Create Staff",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('staffId', json.id);",
+                  "    console.log('New staffId saved:', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Dr. Jane Smith\",\n  \"email\": \"jane.smith@clinic.com\",\n  \"phoneNumber\": \"555-0101\",\n  \"specialty\": \"General Practice\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staffsapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "staffsapi"]
+            },
+            "description": "Creates a new staff member. Admin only. Responds with 201 Created and the new staff record. Also auto-saves the new ID to `staffId`."
+          }
+        },
+        {
+          "name": "Update Staff",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Dr. Jane Smith (Updated)\",\n  \"email\": \"jane.updated@clinic.com\",\n  \"phoneNumber\": \"555-0199\",\n  \"specialty\": \"Cardiology\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/staffsapi/{{staffId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "staffsapi", "{{staffId}}"]
+            },
+            "description": "Updates an existing staff member by ID. Admin only. Responds with 200 OK and the updated record."
+          }
+        },
+        {
+          "name": "Delete Staff",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/staffsapi/{{staffId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "staffsapi", "{{staffId}}"]
+            },
+            "description": "Deletes a staff member. If the staff has linked appointments, performs a soft-delete (deactivates). Otherwise permanently removes. Admin only."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "description": "CRUD operations for appointments. All authenticated users can perform any operation.",
+      "item": [
+        {
+          "name": "Get All Appointments",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.length > 0) {",
+                  "        pm.collectionVariables.set('appointmentId', json[0].id);",
+                  "        console.log('appointmentId set to:', json[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/appointmentsapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointmentsapi"]
+            },
+            "description": "Returns all appointments ordered by most recent first, with the assigned staff member's name. Also auto-saves the first appointment ID."
+          }
+        },
+        {
+          "name": "Get Appointment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/appointmentsapi/{{appointmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointmentsapi", "{{appointmentId}}"]
+            },
+            "description": "Returns a single appointment by GUID."
+          }
+        },
+        {
+          "name": "Create Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('appointmentId', json.id);",
+                  "    console.log('New appointmentId saved:', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staffId\": \"{{staffId}}\",\n  \"clientName\": \"John Doe\",\n  \"clientEmail\": \"john.doe@email.com\",\n  \"clientPhone\": \"555-0202\",\n  \"startTime\": \"2026-03-01T10:00:00\",\n  \"durationMinutes\": 30,\n  \"status\": \"Scheduled\",\n  \"notes\": \"First visit — general checkup\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/appointmentsapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointmentsapi"]
+            },
+            "description": "Creates a new appointment. The `staffId` field must be a valid staff GUID. Uses the `staffId` variable saved from the Staffs folder."
+          }
+        },
+        {
+          "name": "Update Appointment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staffId\": \"{{staffId}}\",\n  \"clientName\": \"John Doe (Updated)\",\n  \"clientEmail\": \"john.updated@email.com\",\n  \"clientPhone\": \"555-0299\",\n  \"startTime\": \"2026-03-01T14:00:00\",\n  \"durationMinutes\": 45,\n  \"status\": \"Confirmed\",\n  \"notes\": \"Rescheduled to afternoon slot\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/appointmentsapi/{{appointmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointmentsapi", "{{appointmentId}}"]
+            },
+            "description": "Updates an existing appointment by ID. Returns 200 OK with the updated record."
+          }
+        },
+        {
+          "name": "Delete Appointment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/appointmentsapi/{{appointmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointmentsapi", "{{appointmentId}}"]
+            },
+            "description": "Permanently deletes an appointment. Returns 204 No Content on success."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Roles",
+      "description": "CRUD operations for roles. All operations require Admin role.",
+      "item": [
+        {
+          "name": "Get All Roles",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.length > 0) {",
+                  "        pm.collectionVariables.set('roleId', json[0].id);",
+                  "        console.log('roleId set to:', json[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rolesapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rolesapi"]
+            },
+            "description": "Returns all roles with the number of users assigned to each."
+          }
+        },
+        {
+          "name": "Get Role by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rolesapi/{{roleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rolesapi", "{{roleId}}"]
+            },
+            "description": "Returns a single role by GUID."
+          }
+        },
+        {
+          "name": "Create Role",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('roleId', json.id);",
+                  "    console.log('New roleId saved:', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleName\": \"Receptionist\",\n  \"description\": \"Front desk staff who can manage appointments\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rolesapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rolesapi"]
+            },
+            "description": "Creates a new role. Admin only. Returns 201 Created."
+          }
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleName\": \"Receptionist (Updated)\",\n  \"description\": \"Updated description for front desk role\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rolesapi/{{roleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rolesapi", "{{roleId}}"]
+            },
+            "description": "Updates an existing role by ID. Admin only."
+          }
+        },
+        {
+          "name": "Delete Role",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rolesapi/{{roleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rolesapi", "{{roleId}}"]
+            },
+            "description": "Deletes a role. Admin only. Returns 204 No Content."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Menus",
+      "description": "CRUD operations for navigation menu items. All operations require Admin role.",
+      "item": [
+        {
+          "name": "Get All Menus",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.length > 0) {",
+                  "        pm.collectionVariables.set('menuId', json[0].id);",
+                  "        console.log('menuId set to:', json[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menusapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menusapi"]
+            },
+            "description": "Returns all menu items ordered by display order."
+          }
+        },
+        {
+          "name": "Get Menu by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menusapi/{{menuId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menusapi", "{{menuId}}"]
+            },
+            "description": "Returns a single menu item by GUID."
+          }
+        },
+        {
+          "name": "Create Menu",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('menuId', json.id);",
+                  "    console.log('New menuId saved:', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"menuName\": \"Reports\",\n  \"url\": \"/Reports\",\n  \"displayOrder\": 10,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/menusapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menusapi"]
+            },
+            "description": "Creates a new navigation menu item. Admin only. Returns 201 Created."
+          }
+        },
+        {
+          "name": "Update Menu",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"menuName\": \"Reports (Updated)\",\n  \"url\": \"/Reports/Index\",\n  \"displayOrder\": 10,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/menusapi/{{menuId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menusapi", "{{menuId}}"]
+            },
+            "description": "Updates an existing menu item. Admin only."
+          }
+        },
+        {
+          "name": "Delete Menu",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menusapi/{{menuId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menusapi", "{{menuId}}"]
+            },
+            "description": "Deletes a menu item. Admin only. Returns 204 No Content."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "CRUD operations for user accounts. All operations require Admin role.",
+      "item": [
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.length > 0) {",
+                  "        pm.collectionVariables.set('userId', json[0].id);",
+                  "        console.log('userId set to:', json[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usersapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usersapi"]
+            },
+            "description": "Returns all users with their roles and menus. Pending users listed first."
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usersapi/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usersapi", "{{userId}}"]
+            },
+            "description": "Returns a single user by GUID."
+          }
+        },
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('userId', json.id);",
+                  "    console.log('New userId saved:', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Alice Johnson\",\n  \"username\": \"alice.johnson\",\n  \"email\": \"alice@clinic.com\",\n  \"password\": \"Alice@123\",\n  \"isActive\": true,\n  \"roleIds\": [],\n  \"menuIds\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usersapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usersapi"]
+            },
+            "description": "Creates a new user account (admin-created users are auto-approved). Returns 201 Created."
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usersapi/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usersapi", "{{userId}}"]
+            },
+            "description": "Deletes a user account. Admin only. Returns 204 No Content."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboardapi",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboardapi"]
+            },
+            "description": "Returns overall system statistics: total/scheduled/completed/cancelled appointments, staff counts, user counts, pending approvals, and most recent appointments."
+          }
+        }
+      ]
+    }
+  ]
+}
