@@ -12,13 +12,14 @@
 
         <div class="ln-nav-links" id="navLinks">
             <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
             <a href="#industries">Industries</a>
             <a href="#integrations">Integrations</a>
         </div>
 
         <div class="ln-nav-actions" id="navActions">
             <a asp-controller="Account" asp-action="Login" class="ln-nav-login">Log in</a>
-            <a asp-controller="Account" asp-action="Login" class="ln-nav-cta">Get started</a>
+            <a asp-controller="Account" asp-action="Login" class="ln-nav-cta">Get started free</a>
         </div>
 
         <button class="ln-nav-toggle" id="navToggle" onclick="toggleMobileNav()" aria-label="Menu">
@@ -30,22 +31,129 @@
 
 
 @* ═══════════════════════════════════════
-   HERO
+   HERO — Split layout with floating dashboard mockup
    ═══════════════════════════════════════ *@
 <section class="ln-hero">
-    <div class="ln-hero-inner">
-        <h1>Scheduling software to power exceptional client experiences</h1>
-        <p>Book appointments, take payments, and automate the follow-ups—so you can deliver standout service every time.</p>
-        <div class="ln-hero-actions">
-            <a asp-controller="Account" asp-action="Login" class="ln-hero-cta">Get started</a>
-            <span class="ln-hero-subtext">No credit card needed</span>
+    @* Decorative floating orbs *@
+    <div class="ln-hero-orb ln-hero-orb--1"></div>
+    <div class="ln-hero-orb ln-hero-orb--2"></div>
+    <div class="ln-hero-orb ln-hero-orb--3"></div>
+
+    <div class="ln-hero-inner ln-hero-split">
+        <div class="ln-hero-text">
+            <div class="ln-hero-badge reveal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <span>Trusted by 10,000+ businesses worldwide</span>
+            </div>
+            <h1>Scheduling that turns clients into regulars</h1>
+            <p>Book appointments, manage staff, take payments, and automate follow-ups — so you can deliver standout service every single time.</p>
+            <div class="ln-hero-actions">
+                <a asp-controller="Account" asp-action="Login" class="ln-hero-cta">
+                    Start free today
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+                <a href="#how-it-works" class="ln-hero-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                    See how it works
+                </a>
+            </div>
+            <div class="ln-hero-subtext">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                No credit card required &nbsp;&middot;&nbsp; Free 14-day trial &nbsp;&middot;&nbsp; Cancel anytime
+            </div>
+        </div>
+
+        <div class="ln-hero-visual reveal-scale">
+            @* CSS-built floating dashboard mockup *@
+            <div class="ln-mockup">
+                <div class="ln-mockup-header">
+                    <div class="ln-mockup-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="ln-mockup-url">appointra.com/dashboard</div>
+                </div>
+                <div class="ln-mockup-body">
+                    <div class="ln-mockup-sidebar">
+                        <div class="ln-mockup-logo">a</div>
+                        <div class="ln-mockup-nav-item ln-mockup-nav-active"></div>
+                        <div class="ln-mockup-nav-item"></div>
+                        <div class="ln-mockup-nav-item"></div>
+                        <div class="ln-mockup-nav-item"></div>
+                    </div>
+                    <div class="ln-mockup-content">
+                        <div class="ln-mockup-stat-row">
+                            <div class="ln-mockup-stat" style="--accent:#2d6a4f;">
+                                <div class="ln-mockup-stat-num">128</div>
+                                <div class="ln-mockup-stat-label">Appointments</div>
+                            </div>
+                            <div class="ln-mockup-stat" style="--accent:#2980b9;">
+                                <div class="ln-mockup-stat-num">24</div>
+                                <div class="ln-mockup-stat-label">Today</div>
+                            </div>
+                            <div class="ln-mockup-stat" style="--accent:#d4ac0d;">
+                                <div class="ln-mockup-stat-num">96%</div>
+                                <div class="ln-mockup-stat-label">Completed</div>
+                            </div>
+                        </div>
+                        <div class="ln-mockup-chart">
+                            <div class="ln-mockup-bar" style="height:40%;"></div>
+                            <div class="ln-mockup-bar" style="height:65%;"></div>
+                            <div class="ln-mockup-bar" style="height:45%;"></div>
+                            <div class="ln-mockup-bar" style="height:80%;"></div>
+                            <div class="ln-mockup-bar" style="height:55%;"></div>
+                            <div class="ln-mockup-bar" style="height:90%;"></div>
+                            <div class="ln-mockup-bar" style="height:70%;"></div>
+                        </div>
+                        <div class="ln-mockup-list">
+                            <div class="ln-mockup-list-item">
+                                <div class="ln-mockup-avatar" style="background:#2d6a4f;">S</div>
+                                <div class="ln-mockup-list-text">
+                                    <div class="ln-mockup-list-title"></div>
+                                    <div class="ln-mockup-list-sub"></div>
+                                </div>
+                                <div class="ln-mockup-badge ln-mockup-badge--green">Confirmed</div>
+                            </div>
+                            <div class="ln-mockup-list-item">
+                                <div class="ln-mockup-avatar" style="background:#2980b9;">J</div>
+                                <div class="ln-mockup-list-text">
+                                    <div class="ln-mockup-list-title"></div>
+                                    <div class="ln-mockup-list-sub"></div>
+                                </div>
+                                <div class="ln-mockup-badge ln-mockup-badge--blue">Pending</div>
+                            </div>
+                            <div class="ln-mockup-list-item">
+                                <div class="ln-mockup-avatar" style="background:#d4ac0d;">E</div>
+                                <div class="ln-mockup-list-text">
+                                    <div class="ln-mockup-list-title"></div>
+                                    <div class="ln-mockup-list-sub"></div>
+                                </div>
+                                <div class="ln-mockup-badge ln-mockup-badge--green">Confirmed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Floating notification card *@
+            <div class="ln-float-card ln-float-card--notification">
+                <div class="ln-float-card-icon" style="background:#e9f7ef; color:#27ae60;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div>
+                    <div class="ln-float-card-title">New Booking!</div>
+                    <div class="ln-float-card-text">Sarah L. booked Haircut &mdash; Today, 2:00 PM</div>
+                </div>
+            </div>
+
+            @* Floating rating card *@
+            <div class="ln-float-card ln-float-card--rating">
+                <div class="ln-float-card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="ln-float-card-text">4.9 average rating</div>
+                <div class="ln-float-card-sub">from 1,200+ reviews</div>
+            </div>
         </div>
     </div>
-    <div class="ln-hero-decor">
-        <div class="ln-hero-decor-strip" style="background:#c4b5a0;"></div>
-        <div class="ln-hero-decor-strip" style="background:#e8ddd0;"></div>
-        <div class="ln-hero-decor-strip" style="background:#2d6a4f;"></div>
-    </div>
+
     <div class="ln-hero-scroll">
         <span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -56,144 +164,287 @@
 
 
 @* ═══════════════════════════════════════
-   PREVIEW / SOCIAL PROOF
+   LOGO BAR / TRUST STRIP
    ═══════════════════════════════════════ *@
-<section class="ln-preview">
+<section class="ln-trust-strip">
     <div class="ln-container">
-        <div class="ln-preview-card reveal-scale">
-            <div class="ln-preview-header">
-                <div class="ln-preview-provider">
-                    <div class="ln-preview-provider-avatar">W</div>
-                    <div class="ln-preview-provider-info">
-                        <h3>Wellness Studio</h3>
-                        <span>Los Angeles, CA · Online Booking</span>
-                    </div>
-                </div>
-                <div class="ln-preview-stats">
-                    <span><strong>32</strong> day programs</span>
-                    <span><strong>4.9</strong> ★ rating</span>
-                    <span><strong>1,200+</strong> bookings</span>
-                </div>
+        <p class="ln-trust-strip-label">Trusted by leading brands</p>
+        <div class="ln-trust-strip-logos">
+            <div class="ln-trust-strip-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+                <span>Calm Studio</span>
             </div>
-
-            <div class="ln-preview-reviews">
-                <div class="ln-preview-review">
-                    <img class="ln-preview-review-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Sarah L." />
-                    <div class="ln-preview-review-content">
-                        <div class="ln-preview-review-name">Sarah L.</div>
-                        <div class="ln-preview-review-stars">★ ★ ★ ★ ★</div>
-                        <div class="ln-preview-review-text">Booking was seamless and I loved getting the automatic reminders. The whole process from start to finish was incredibly smooth.</div>
-                    </div>
-                </div>
-                <div class="ln-preview-review">
-                    <img class="ln-preview-review-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="James M." />
-                    <div class="ln-preview-review-content">
-                        <div class="ln-preview-review-name">James M.</div>
-                        <div class="ln-preview-review-stars">★ ★ ★ ★ ★</div>
-                        <div class="ln-preview-review-text">Best scheduling tool I've used. My clients love how easy it is to book their appointments online anytime.</div>
-                    </div>
-                </div>
-                <div class="ln-preview-review">
-                    <img class="ln-preview-review-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Emma K." />
-                    <div class="ln-preview-review-content">
-                        <div class="ln-preview-review-name">Emma K.</div>
-                        <div class="ln-preview-review-stars">★ ★ ★ ★ ★</div>
-                        <div class="ln-preview-review-text">Love the reminders and the clean interface. It has completely transformed how I manage my practice.</div>
-                    </div>
-                </div>
+            <div class="ln-trust-strip-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span>FlexFit</span>
             </div>
-        </div>
-
-        <div class="ln-social-proof">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Trusted by thousands of businesses worldwide
-        </div>
-
-        <div class="ln-trust-logos">
-            <span class="ln-trust-logo">Calm Studio</span>
-            <span class="ln-trust-logo">FlexFit</span>
-            <span class="ln-trust-logo">Glow&Co</span>
-            <span class="ln-trust-logo">ZenSpa</span>
-            <span class="ln-trust-logo">The Barber Co</span>
+            <div class="ln-trust-strip-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Glow&amp;Co</span>
+            </div>
+            <div class="ln-trust-strip-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span>ZenSpa</span>
+            </div>
+            <div class="ln-trust-strip-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <span>The Barber Co</span>
+            </div>
+            <div class="ln-trust-strip-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>VitalCare</span>
+            </div>
         </div>
     </div>
 </section>
 
 
 @* ═══════════════════════════════════════
-   FEATURE CARDS
+   STATS COUNTER
+   ═══════════════════════════════════════ *@
+<section class="ln-stats">
+    <div class="ln-container">
+        <div class="ln-stats-grid">
+            <div class="ln-stat-item reveal">
+                <div class="ln-stat-number" data-count="10000">10,000+</div>
+                <div class="ln-stat-label">Businesses</div>
+                <div class="ln-stat-desc">use Appointra daily</div>
+            </div>
+            <div class="ln-stat-item reveal">
+                <div class="ln-stat-number" data-count="2500000">2.5M+</div>
+                <div class="ln-stat-label">Appointments</div>
+                <div class="ln-stat-desc">booked every month</div>
+            </div>
+            <div class="ln-stat-item reveal">
+                <div class="ln-stat-number">99.9%</div>
+                <div class="ln-stat-label">Uptime</div>
+                <div class="ln-stat-desc">reliability guaranteed</div>
+            </div>
+            <div class="ln-stat-item reveal">
+                <div class="ln-stat-number">4.9/5</div>
+                <div class="ln-stat-label">Rating</div>
+                <div class="ln-stat-desc">from real customers</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   FEATURE CARDS — with illustrations
    ═══════════════════════════════════════ *@
 <section class="ln-features" id="features">
     <div class="ln-container">
+        <div class="ln-section-header" style="text-align:center; margin-bottom:var(--space-3xl);">
+            <p class="ln-section-eyebrow reveal">FEATURES</p>
+            <h2 class="reveal" style="max-width:600px; margin:0 auto;">Everything you need to run your scheduling like a pro</h2>
+        </div>
+
         <div class="ln-features-grid">
 
             <div class="ln-feature-card ln-feature-card--wide reveal">
-                <div class="ln-feature-card-icon" style="background:#e8f4fd; color:#2980b9;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <div class="ln-feature-card-visual">
+                    @* Mini calendar illustration *@
+                    <div class="ln-mini-cal">
+                        <div class="ln-mini-cal-header">
+                            <span>February 2026</span>
+                            <div class="ln-mini-cal-nav">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                            </div>
+                        </div>
+                        <div class="ln-mini-cal-days">
+                            <span class="ln-mini-cal-day-name">Mo</span>
+                            <span class="ln-mini-cal-day-name">Tu</span>
+                            <span class="ln-mini-cal-day-name">We</span>
+                            <span class="ln-mini-cal-day-name">Th</span>
+                            <span class="ln-mini-cal-day-name">Fr</span>
+                            <span class="ln-mini-cal-day-name ln-mini-cal-day-name--muted">Sa</span>
+                            <span class="ln-mini-cal-day-name ln-mini-cal-day-name--muted">Su</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--muted">26</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--muted">27</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--muted">28</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--muted">29</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--muted">30</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--muted">31</span>
+                            <span class="ln-mini-cal-day">1</span>
+                            <span class="ln-mini-cal-day">2</span>
+                            <span class="ln-mini-cal-day">3</span>
+                            <span class="ln-mini-cal-day">4</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--dot">5</span>
+                            <span class="ln-mini-cal-day">6</span>
+                            <span class="ln-mini-cal-day">7</span>
+                            <span class="ln-mini-cal-day">8</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--dot">9</span>
+                            <span class="ln-mini-cal-day">10</span>
+                            <span class="ln-mini-cal-day">11</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--dot">12</span>
+                            <span class="ln-mini-cal-day">13</span>
+                            <span class="ln-mini-cal-day">14</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--active">15</span>
+                            <span class="ln-mini-cal-day">16</span>
+                            <span class="ln-mini-cal-day">17</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--dot">18</span>
+                            <span class="ln-mini-cal-day">19</span>
+                            <span class="ln-mini-cal-day">20</span>
+                            <span class="ln-mini-cal-day">21</span>
+                            <span class="ln-mini-cal-day">22</span>
+                            <span class="ln-mini-cal-day ln-mini-cal-day--dot">23</span>
+                            <span class="ln-mini-cal-day">24</span>
+                            <span class="ln-mini-cal-day">25</span>
+                            <span class="ln-mini-cal-day">26</span>
+                            <span class="ln-mini-cal-day">27</span>
+                            <span class="ln-mini-cal-day">28</span>
+                        </div>
+                    </div>
                 </div>
-                <h3>Control your availability with online appointments</h3>
-                <p>Share your link so clients can book on your schedule on your own terms. Customize exactly when and where clients can book and let your staff set their own availability at scale. Power your business with a scheduling automation.</p>
-                <div class="ln-feature-mock">
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#2980b9;"></span>
-                        Monday – Friday
-                        <span style="margin-left:auto; font-weight:500;">9:00 AM – 5:00 PM</span>
+                <div class="ln-feature-card-text">
+                    <div class="ln-feature-card-icon" style="background:#e8f4fd; color:#2980b9;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     </div>
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#27ae60;"></span>
-                        Saturday
-                        <span style="margin-left:auto; font-weight:500;">10:00 AM – 2:00 PM</span>
-                    </div>
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#c0392b;"></span>
-                        Sunday
-                        <span style="margin-left:auto; font-weight:500;">Closed</span>
+                    <h3>Control your availability with online appointments</h3>
+                    <p>Share your link so clients can book on your schedule. Customize exactly when and where clients can book and let your staff set their own availability at scale.</p>
+                    <div class="ln-feature-mock">
+                        <div class="ln-feature-mock-row">
+                            <span class="ln-feature-mock-dot" style="background:#2980b9;"></span>
+                            Mon – Fri
+                            <span style="margin-left:auto; font-weight:500;">9:00 AM – 5:00 PM</span>
+                        </div>
+                        <div class="ln-feature-mock-row">
+                            <span class="ln-feature-mock-dot" style="background:#27ae60;"></span>
+                            Saturday
+                            <span style="margin-left:auto; font-weight:500;">10:00 AM – 2:00 PM</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2 -->
             <div class="ln-feature-card reveal">
                 <div class="ln-feature-card-icon" style="background:#e9f7ef; color:#27ae60;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                 </div>
-                <h3>Enable automated appointment booking</h3>
-                <p>Seamlessly manage multiple locations and staff — let your clients find an open slot, book, and receive confirmations automatically without any back‑and‑forth.</p>
-                <div class="ln-feature-mock">
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#27ae60;"></span>
-                        Auto-confirm
-                        <span style="margin-left:auto; font-weight:500;">Enabled</span>
+                <h3>Automated booking &amp; reminders</h3>
+                <p>Let clients find open slots, book, and get confirmations automatically. Reduce no-shows with smart reminders.</p>
+                @* Inline illustration — notification stack *@
+                <div class="ln-notif-stack">
+                    <div class="ln-notif-item ln-notif-item--1">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span>Booking confirmed — Sarah L.</span>
                     </div>
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#2980b9;"></span>
-                        Email reminder
-                        <span style="margin-left:auto; font-weight:500;">24hr before</span>
+                    <div class="ln-notif-item ln-notif-item--2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2980b9" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+                        <span>Reminder sent — James M.</span>
+                    </div>
+                    <div class="ln-notif-item ln-notif-item--3">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4ac0d" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>Upcoming in 1 hour — Emma K.</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 3 -->
             <div class="ln-feature-card reveal">
                 <div class="ln-feature-card-icon" style="background:#fef5e7; color:#d4ac0d;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
-                <h3>Grow your customer base and keep them engaged</h3>
-                <p>Create branded booking pages to strengthen brand presence, grow engagement with powerful loyalty tools, and drive returning customers through automated follow‑ups.</p>
-                <div class="ln-feature-mock">
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#d4ac0d;"></span>
-                        New clients this month
-                        <span style="margin-left:auto; font-weight:600; color:var(--color-success);">+24%</span>
-                    </div>
-                    <div class="ln-feature-mock-row">
-                        <span class="ln-feature-mock-dot" style="background:#e74c3c;"></span>
-                        Returning clients
-                        <span style="margin-left:auto; font-weight:600; color:var(--color-success);">+18%</span>
+                <h3>Grow your customer base</h3>
+                <p>Branded booking pages, loyalty tools, and automated follow-ups that drive returning customers and new referrals.</p>
+                @* Inline illustration — growth chart *@
+                <div class="ln-growth-chart">
+                    <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#2d6a4f" stop-opacity="0.15"/>
+                                <stop offset="100%" stop-color="#2d6a4f" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0 70 Q30 65 50 55 T100 35 T150 20 T200 5" stroke="#2d6a4f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M0 70 Q30 65 50 55 T100 35 T150 20 T200 5 V80 H0 Z" fill="url(#growthGrad)"/>
+                        <circle cx="50" cy="55" r="3" fill="#2d6a4f"/>
+                        <circle cx="100" cy="35" r="3" fill="#2d6a4f"/>
+                        <circle cx="150" cy="20" r="3" fill="#2d6a4f"/>
+                        <circle cx="200" cy="5" r="4" fill="#2d6a4f" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <div class="ln-growth-label">
+                        <span style="color:var(--color-success); font-weight:600;">+24%</span> new clients this month
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   HOW IT WORKS — 3-step visual
+   ═══════════════════════════════════════ *@
+<section class="ln-how-it-works" id="how-it-works">
+    <div class="ln-container">
+        <div class="ln-section-header" style="text-align:center; margin-bottom:var(--space-4xl);">
+            <p class="ln-section-eyebrow reveal">HOW IT WORKS</p>
+            <h2 class="reveal" style="max-width:560px; margin:0 auto;">Get started in three simple steps</h2>
+        </div>
+
+        <div class="ln-steps-grid">
+            <div class="ln-step reveal">
+                <div class="ln-step-number">1</div>
+                <div class="ln-step-illustration">
+                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="80" height="80" rx="16" fill="#e8f4fd"/>
+                        <rect x="32" y="38" width="56" height="8" rx="4" fill="#2980b9" opacity="0.3"/>
+                        <rect x="32" y="52" width="40" height="8" rx="4" fill="#2980b9" opacity="0.2"/>
+                        <rect x="32" y="66" width="56" height="8" rx="4" fill="#2980b9" opacity="0.3"/>
+                        <rect x="32" y="80" width="30" height="8" rx="4" fill="#2980b9" opacity="0.2"/>
+                        <circle cx="85" cy="35" r="18" fill="#2980b9"/>
+                        <path d="M79 35l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h4>Create your account</h4>
+                <p>Sign up in seconds. Set up your business profile, services, and team members.</p>
+            </div>
+
+            <div class="ln-step-connector reveal">
+                <svg width="60" height="24" viewBox="0 0 60 24" fill="none"><path d="M0 12h52m0 0l-8-8m8 8l-8 8" stroke="var(--color-border)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+
+            <div class="ln-step reveal">
+                <div class="ln-step-number">2</div>
+                <div class="ln-step-illustration">
+                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="80" height="80" rx="16" fill="#e9f7ef"/>
+                        <rect x="30" y="30" width="60" height="12" rx="4" fill="#27ae60" opacity="0.15"/>
+                        <line x1="30" y1="50" x2="90" y2="50" stroke="#27ae60" stroke-opacity="0.2" stroke-width="1"/>
+                        <rect x="30" y="55" width="60" height="10" rx="3" fill="#27ae60" opacity="0.1"/>
+                        <rect x="30" y="70" width="60" height="10" rx="3" fill="#27ae60" opacity="0.1"/>
+                        <rect x="30" y="85" width="28" height="10" rx="3" fill="#27ae60" opacity="0.1"/>
+                        <rect x="62" y="85" width="28" height="10" rx="3" fill="#27ae60"/>
+                        <circle cx="36" cy="36" r="4" fill="#27ae60" opacity="0.6"/>
+                        <text x="44" y="39" font-size="8" fill="#27ae60" font-weight="600">Feb 2026</text>
+                    </svg>
+                </div>
+                <h4>Share your booking link</h4>
+                <p>Clients browse your calendar, pick a time, and book instantly — no phone calls needed.</p>
+            </div>
+
+            <div class="ln-step-connector reveal">
+                <svg width="60" height="24" viewBox="0 0 60 24" fill="none"><path d="M0 12h52m0 0l-8-8m8 8l-8 8" stroke="var(--color-border)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+
+            <div class="ln-step reveal">
+                <div class="ln-step-number">3</div>
+                <div class="ln-step-illustration">
+                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="80" height="80" rx="16" fill="#fef5e7"/>
+                        <circle cx="60" cy="55" r="22" fill="#d4ac0d" opacity="0.15"/>
+                        <circle cx="60" cy="55" r="14" fill="#d4ac0d" opacity="0.25"/>
+                        <path d="M54 55l4 4 8-8" stroke="#d4ac0d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="34" y="82" width="52" height="10" rx="5" fill="#d4ac0d"/>
+                        <text x="60" y="90" font-size="7" fill="#fff" text-anchor="middle" font-weight="600">GROW</text>
+                    </svg>
+                </div>
+                <h4>Grow &amp; automate</h4>
+                <p>Track analytics, automate reminders, and watch your business grow with every booking.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -204,20 +455,22 @@
    ═══════════════════════════════════════ *@
 <section class="ln-industries" id="industries">
     <div class="ln-container">
-        <div class="ln-section-header ln-section-header--split reveal">
-            <div>
-                <h2>Appointment software that adapts to your business</h2>
-            </div>
-            <p>Free up time in your day with scheduling tools tailored to your needs.</p>
+        <div class="ln-section-header" style="text-align:center; margin-bottom:var(--space-3xl);">
+            <p class="ln-section-eyebrow reveal">INDUSTRIES</p>
+            <h2 class="reveal" style="max-width:560px; margin:0 auto;">Scheduling software that adapts to your business</h2>
+            <p class="reveal" style="max-width:480px; margin:var(--space-md) auto 0; color:var(--color-text-secondary);">Free up time in your day with scheduling tools tailored to your needs.</p>
         </div>
 
         <div class="ln-industries-grid stagger-children">
             <div class="ln-industry-card reveal">
                 <div class="ln-industry-card-img">
                     <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=440&fit=crop" alt="Hair and Beauty Salon" loading="lazy" />
+                    <div class="ln-industry-overlay">
+                        <span>Learn more &rarr;</span>
+                    </div>
                 </div>
                 <div class="ln-industry-info">
-                    <h4>Hair, Nails &amp; Beauty Services</h4>
+                    <h4>Hair, Nails &amp; Beauty</h4>
                     <div class="ln-industry-tags">
                         <span>Hair salon</span>
                         <span>Nail salon</span>
@@ -228,12 +481,15 @@
             <div class="ln-industry-card reveal">
                 <div class="ln-industry-card-img">
                     <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=440&fit=crop" alt="Spa and Wellness" loading="lazy" />
+                    <div class="ln-industry-overlay">
+                        <span>Learn more &rarr;</span>
+                    </div>
                 </div>
                 <div class="ln-industry-info">
                     <h4>Spa &amp; Wellness</h4>
                     <div class="ln-industry-tags">
-                        <span>Spa and day spa</span>
-                        <span>Massage Therapy</span>
+                        <span>Day spa</span>
+                        <span>Massage</span>
                         <span>Medi-spa</span>
                     </div>
                 </div>
@@ -241,13 +497,32 @@
             <div class="ln-industry-card reveal">
                 <div class="ln-industry-card-img">
                     <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=440&fit=crop" alt="Fitness and Sports" loading="lazy" />
+                    <div class="ln-industry-overlay">
+                        <span>Learn more &rarr;</span>
+                    </div>
                 </div>
                 <div class="ln-industry-info">
-                    <h4>Fitness &amp; Sports Training</h4>
+                    <h4>Fitness &amp; Training</h4>
                     <div class="ln-industry-tags">
                         <span>Personal Trainer</span>
                         <span>Fitness</span>
                         <span>Studio</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ln-industry-card reveal">
+                <div class="ln-industry-card-img">
+                    <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600&h=440&fit=crop" alt="Healthcare" loading="lazy" />
+                    <div class="ln-industry-overlay">
+                        <span>Learn more &rarr;</span>
+                    </div>
+                </div>
+                <div class="ln-industry-info">
+                    <h4>Healthcare &amp; Dental</h4>
+                    <div class="ln-industry-tags">
+                        <span>Dentist</span>
+                        <span>Clinic</span>
+                        <span>Therapy</span>
                     </div>
                 </div>
             </div>
@@ -259,23 +534,24 @@
 @* ═══════════════════════════════════════
    DETAIL ROW 1 — Booking & Payments
    ═══════════════════════════════════════ *@
-<section class="ln-detail" style="background:var(--color-surface);">
+<section class="ln-detail" style="background:var(--color-bg);">
     <div class="ln-container">
         <div class="ln-detail-row">
             <div class="ln-detail-content reveal-left">
-                <h2>Delight clients with robust online booking options and payment tools</h2>
+                <p class="ln-section-eyebrow">ONLINE BOOKING</p>
+                <h2>Delight clients with robust online booking &amp; payment tools</h2>
                 <div class="ln-accordion">
                     <details open>
                         <summary>Seamless booking experience</summary>
-                        <p>Let clients browse available time slots, choose their preferred staff member, and book instantly — all from a beautiful, mobile‑friendly interface. No phone calls required.</p>
+                        <p>Let clients browse available time slots, choose their preferred staff member, and book instantly — all from a beautiful, mobile-friendly interface.</p>
                     </details>
                     <details>
                         <summary>Relationship-building tools</summary>
-                        <p>Send automated confirmations, reminders, and follow‑up messages. Keep a complete client history with notes, so every interaction feels personal and intentional.</p>
+                        <p>Send automated confirmations, reminders, and follow-up messages. Keep a complete client history with notes, so every interaction feels personal.</p>
                     </details>
                     <details>
-                        <summary>Easy and secure client payment options</summary>
-                        <p>Accept payments at booking or on‑site. Integrated with major payment providers to process transactions securely, reduce no‑shows with prepayment, and simplify reconciliation.</p>
+                        <summary>Easy and secure payment options</summary>
+                        <p>Accept payments at booking or on-site. Integrated with major providers, reduce no-shows with prepayment, and simplify reconciliation.</p>
                     </details>
                 </div>
             </div>
@@ -290,23 +566,24 @@
 @* ═══════════════════════════════════════
    DETAIL ROW 2 — Management
    ═══════════════════════════════════════ *@
-<section class="ln-detail">
+<section class="ln-detail" style="background:var(--color-surface);">
     <div class="ln-container">
         <div class="ln-detail-row ln-detail-row--reverse">
             <div class="ln-detail-content reveal-right">
+                <p class="ln-section-eyebrow">MANAGEMENT</p>
                 <h2>Easy scheduling management, so you&nbsp;can focus on your passion</h2>
                 <div class="ln-accordion">
                     <details open>
-                        <summary>Scheduling software with flexible availability tools</summary>
-                        <p>Set recurring hours, block off personal time, create buffer periods between appointments, and define service‑specific durations — everything adapts to your workflow.</p>
+                        <summary>Flexible availability tools</summary>
+                        <p>Set recurring hours, block personal time, create buffer periods, and define service-specific durations — everything adapts to your workflow.</p>
                     </details>
                     <details>
-                        <summary>Calendar and staff management in real‑time per day</summary>
-                        <p>View every team member's schedule at a glance. Drag‑and‑drop to reassign, spot gaps instantly, and balance workloads across your entire operation.</p>
+                        <summary>Real-time calendar &amp; staff management</summary>
+                        <p>View every team member's schedule at a glance. Reassign appointments, spot gaps, and balance workloads across your operation.</p>
                     </details>
                     <details>
-                        <summary>Scheduling tools to grow your client reach</summary>
-                        <p>Embed your booking page anywhere — your website, social profiles, or email signatures. Meet clients where they already are, and grow bookings organically.</p>
+                        <summary>Scheduling tools to grow your reach</summary>
+                        <p>Embed your booking page anywhere — your website, social profiles, or email signatures. Meet clients where they already are.</p>
                     </details>
                 </div>
             </div>
@@ -319,31 +596,50 @@
 
 
 @* ═══════════════════════════════════════
-   INTEGRATIONS
+   TESTIMONIALS — Enhanced
    ═══════════════════════════════════════ *@
-<section class="ln-integrations" id="integrations">
+<section class="ln-testimonials">
     <div class="ln-container">
-        <p class="ln-integrations-label reveal">Integrate with powerful <a href="#">third‑party apps</a></p>
-        <div class="ln-integrations-grid reveal">
-            <div class="ln-integration-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Stripe
+        <div class="ln-section-header" style="text-align:center; margin-bottom:var(--space-3xl);">
+            <p class="ln-section-eyebrow reveal">TESTIMONIALS</p>
+            <h2 class="reveal" style="max-width:520px; margin:0 auto;">Loved by businesses everywhere</h2>
+        </div>
+
+        <div class="ln-testimonials-grid">
+            <div class="ln-testimonial-card reveal">
+                <div class="ln-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>"Booking was seamless and I loved the automatic reminders. The whole process from start to finish was incredibly smooth."</blockquote>
+                <div class="ln-testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Sarah L." loading="lazy" />
+                    <div>
+                        <div class="ln-testimonial-name">Sarah L.</div>
+                        <div class="ln-testimonial-role">Wellness Studio Owner</div>
+                    </div>
+                </div>
             </div>
-            <div class="ln-integration-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
-                Square
+
+            <div class="ln-testimonial-card ln-testimonial-card--featured reveal">
+                <div class="ln-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>"Best scheduling tool I've used. My clients love how easy it is to book their appointments online anytime. Revenue is up 30% since switching."</blockquote>
+                <div class="ln-testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="James M." loading="lazy" />
+                    <div>
+                        <div class="ln-testimonial-name">James M.</div>
+                        <div class="ln-testimonial-role">Barber Shop Manager</div>
+                    </div>
+                </div>
             </div>
-            <div class="ln-integration-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Zapier
-            </div>
-            <div class="ln-integration-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                PayPal
-            </div>
-            <div class="ln-integration-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Google Calendar
+
+            <div class="ln-testimonial-card reveal">
+                <div class="ln-testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>"Love the clean interface. It has completely transformed how I manage my practice. My no-show rate dropped by 60%!"</blockquote>
+                <div class="ln-testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Emma K." loading="lazy" />
+                    <div>
+                        <div class="ln-testimonial-name">Emma K.</div>
+                        <div class="ln-testimonial-role">Physical Therapist</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -351,13 +647,63 @@
 
 
 @* ═══════════════════════════════════════
-   CTA SECTION
+   INTEGRATIONS
+   ═══════════════════════════════════════ *@
+<section class="ln-integrations" id="integrations">
+    <div class="ln-container">
+        <p class="ln-integrations-label reveal">Integrate with powerful <a href="#">third-party apps</a></p>
+        <div class="ln-integrations-grid reveal">
+            <div class="ln-integration-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Stripe
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+                Square
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Zapier
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                PayPal
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Google Calendar
+            </div>
+            <div class="ln-integration-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+                Zoom
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* ═══════════════════════════════════════
+   CTA SECTION — Enhanced with visual
    ═══════════════════════════════════════ *@
 <section class="ln-cta-section">
-    <div class="ln-container">
+    <div class="ln-cta-bg-shapes">
+        <div class="ln-cta-shape ln-cta-shape--1"></div>
+        <div class="ln-cta-shape ln-cta-shape--2"></div>
+        <div class="ln-cta-shape ln-cta-shape--3"></div>
+    </div>
+    <div class="ln-container" style="position:relative; z-index:2;">
+        <div class="ln-cta-badge reveal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Free forever plan available
+        </div>
         <h2 class="reveal">Ready to transform your scheduling?</h2>
-        <p class="reveal">Join thousands of businesses that use Appointra to deliver exceptional client experiences — one appointment at a time.</p>
-        <a asp-controller="Account" asp-action="Login" class="ln-cta-btn reveal">Get started free</a>
+        <p class="reveal">Join 10,000+ businesses that use Appointra to deliver exceptional client experiences — one appointment at a time.</p>
+        <div class="ln-cta-actions reveal">
+            <a asp-controller="Account" asp-action="Login" class="ln-cta-btn">
+                Get started free
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
         <div class="ln-cta-links reveal">
             <a href="#">Help Center</a>
             <a href="#">Contact Support</a>
