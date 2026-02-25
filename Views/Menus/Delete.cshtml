@@ -1,3 +1,8 @@
+@* ===== DELETE MENU CONFIRMATION VIEW =====
+   Warns the user that deleting this menu will remove it from ALL users' navigation.
+   Shows key info (name, URL, display order, assigned users) before confirming.
+   The form POSTs the hidden Id to MenusController.DeleteConfirmed(). *@
+
 @model AppointmentSystem.Web.Models.Menu
 @{
     ViewData["Title"] = "Delete Menu";
@@ -17,6 +22,7 @@
         <p style="font-size:var(--font-sm); color:#96281b;">This will remove the menu from all users' navigation.</p>
     </div>
     <div class="card-body-custom">
+        @* Shows key menu info so the admin can verify they're deleting the right item *@
         <dl class="detail-grid">
             <dt>Menu Name</dt>
             <dd>@Model.MenuName</dd>
@@ -28,9 +34,11 @@
             <dd>@Model.DisplayOrder</dd>
 
             <dt>Assigned Users</dt>
+            @* this count shows how many users will lose this nav item when deleted *@
             <dd>@Model.UserMenus.Count</dd>
         </dl>
 
+        @* Form POSTs to /Menus/Delete — controller also removes UserMenus junction records *@
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" />
             <div class="btn-group-custom" style="margin-top:var(--space-lg);">

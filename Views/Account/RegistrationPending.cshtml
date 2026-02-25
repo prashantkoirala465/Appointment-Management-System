@@ -1,7 +1,14 @@
+@*
+    Account/RegistrationPending.cshtml — Post-registration confirmation (Ananta's module)
+    Shown after a staff member successfully registers.
+    Tells them their account was created but they need admin approval to log in.
+    The admin sees pending registrations on the Users page and can approve/reject.
+*@
 @{
     ViewData["Title"] = "Registration Pending";
 }
 
+@* Centered card with a clock icon, success message, and a link back to login *@
 <div class="login-page">
     <div class="login-wrapper">
         <div class="login-card" style="text-align:center;">
@@ -10,6 +17,7 @@
                 <span>Scheduling Platform</span>
             </div>
 
+            @* Clock icon in warning yellow to indicate "waiting" *@
             <div style="margin:var(--space-xl) 0;">
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning, #d4ac0d)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"/>

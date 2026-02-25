@@ -1,15 +1,29 @@
+@* ===== HOME / LANDING PAGE =====
+   This is the public-facing marketing landing page for Appointra (774 lines).
+   It does NOT use the sidebar layout — it has its own nav, hero, and footer.
+   Key patterns used throughout:
+     - "reveal" CSS classes trigger scroll-based animations via IntersectionObserver in site.js
+     - asp-controller / asp-action tag helpers generate proper MVC URLs
+     - All images use loading="lazy" for performance
+     - SVG icons are inline (no external icon library)
+     - Sections: Nav → Hero → Trust Strip → Stats → Features → How It Works
+                 → Industries → Detail Rows → Testimonials → Integrations → CTA → Footer *@
+
 @{
     ViewData["Title"] = "Scheduling Software for Exceptional Client Experiences";
-    Layout = "_Layout";
+    Layout = "_Layout"; @* explicitly set layout (usually inherited from _ViewStart) *@
 }
 
 @* ═══════════════════════════════════════
-   NAVIGATION
+   NAVIGATION — Custom landing-page nav (not the sidebar used in admin pages)
+   Uses anchor links (#features, #how-it-works, etc.) for smooth scroll within the page.
+   Mobile hamburger toggle is handled by toggleMobileNav() in the inline script.
    ═══════════════════════════════════════ *@
 <nav class="ln-nav">
     <div class="ln-nav-inner">
         <a href="/" class="ln-logo">appointra</a>
 
+        @* Desktop nav links — anchor-scroll to sections on this page *@
         <div class="ln-nav-links" id="navLinks">
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
@@ -17,11 +31,13 @@
             <a href="#integrations">Integrations</a>
         </div>
 
+        @* CTA buttons: use asp-controller/asp-action tag helpers to route to login *@
         <div class="ln-nav-actions" id="navActions">
             <a asp-controller="Account" asp-action="Login" class="ln-nav-login">Log in</a>
             <a asp-controller="Account" asp-action="Login" class="ln-nav-cta">Get started free</a>
         </div>
 
+        @* Hamburger button for mobile — toggles between menu icon and close icon *@
         <button class="ln-nav-toggle" id="navToggle" onclick="toggleMobileNav()" aria-label="Menu">
             <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -32,6 +48,9 @@
 
 @* ═══════════════════════════════════════
    HERO — Split layout with floating dashboard mockup
+   Left side: headline, subtext, CTA buttons
+   Right side: CSS-only dashboard mockup with floating notification/rating cards
+   The "reveal" and "reveal-scale" classes trigger entrance animations on scroll
    ═══════════════════════════════════════ *@
 <section class="ln-hero">
     @* Decorative floating orbs *@
@@ -200,7 +219,9 @@
 
 
 @* ═══════════════════════════════════════
-   STATS COUNTER
+   STATS COUNTER — Social proof numbers
+   data-count attributes could be used by JS for animated counting.
+   Each stat has a number, label, and description line.
    ═══════════════════════════════════════ *@
 <section class="ln-stats">
     <div class="ln-container">
@@ -231,7 +252,9 @@
 
 
 @* ═══════════════════════════════════════
-   FEATURE CARDS — with illustrations
+   FEATURE CARDS — with inline SVG/CSS illustrations
+   The first card is "wide" (spans 2 columns) and includes a mini calendar.
+   Other cards have inline notification stacks and growth charts built with SVG.
    ═══════════════════════════════════════ *@
 <section class="ln-features" id="features">
     <div class="ln-container">
@@ -376,7 +399,9 @@
 
 
 @* ═══════════════════════════════════════
-   HOW IT WORKS — 3-step visual
+   HOW IT WORKS — 3-step visual flow
+   Each step has a numbered circle, an SVG illustration, and a description.
+   Arrow connectors between steps are rendered as separate SVG elements.
    ═══════════════════════════════════════ *@
 <section class="ln-how-it-works" id="how-it-works">
     <div class="ln-container">
@@ -451,7 +476,9 @@
 
 
 @* ═══════════════════════════════════════
-   INDUSTRIES
+   INDUSTRIES — Unsplash images with overlay
+   Uses real photos from Unsplash CDN (w=600&h=440 for consistent aspect ratio).
+   loading="lazy" defers image loading until the user scrolls near them.
    ═══════════════════════════════════════ *@
 <section class="ln-industries" id="industries">
     <div class="ln-container">
@@ -533,6 +560,8 @@
 
 @* ═══════════════════════════════════════
    DETAIL ROW 1 — Booking & Payments
+   Split layout: text content with <details>/<summary> accordion on one side,
+   Unsplash image on the other. The accordion is native HTML5 — no JS needed.
    ═══════════════════════════════════════ *@
 <section class="ln-detail" style="background:var(--color-bg);">
     <div class="ln-container">
@@ -564,7 +593,9 @@
 
 
 @* ═══════════════════════════════════════
-   DETAIL ROW 2 — Management
+   DETAIL ROW 2 — Management (reverse layout)
+   ln-detail-row--reverse flips the image/text order for visual variety.
+   Same <details>/<summary> accordion pattern as Detail Row 1.
    ═══════════════════════════════════════ *@
 <section class="ln-detail" style="background:var(--color-surface);">
     <div class="ln-container">
@@ -596,7 +627,9 @@
 
 
 @* ═══════════════════════════════════════
-   TESTIMONIALS — Enhanced
+   TESTIMONIALS — 3 review cards with star ratings
+   The middle card has ln-testimonial-card--featured for a highlighted style.
+   Author photos come from Unsplash with face-crop parameters.
    ═══════════════════════════════════════ *@
 <section class="ln-testimonials">
     <div class="ln-container">
@@ -647,7 +680,8 @@
 
 
 @* ═══════════════════════════════════════
-   INTEGRATIONS
+   INTEGRATIONS — Grid of third-party service badges
+   Each badge has an inline SVG icon + name. These are decorative/marketing.
    ═══════════════════════════════════════ *@
 <section class="ln-integrations" id="integrations">
     <div class="ln-container">
@@ -683,7 +717,9 @@
 
 
 @* ═══════════════════════════════════════
-   CTA SECTION — Enhanced with visual
+   CTA SECTION — Final call-to-action before footer
+   Background shapes are purely decorative CSS elements.
+   The "Get started free" button routes to the login page via asp-controller/asp-action.
    ═══════════════════════════════════════ *@
 <section class="ln-cta-section">
     <div class="ln-cta-bg-shapes">
@@ -715,7 +751,9 @@
 
 
 @* ═══════════════════════════════════════
-   FOOTER
+   FOOTER — Multi-column layout with brand, links, and social icons
+   Social links use inline SVGs for Twitter, LinkedIn, Instagram, YouTube.
+   Product/Resources/Company columns provide standard SaaS footer navigation.
    ═══════════════════════════════════════ *@
 <footer class="ln-footer">
     <div class="ln-container">

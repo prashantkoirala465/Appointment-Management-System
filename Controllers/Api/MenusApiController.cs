@@ -11,15 +11,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Web.Controllers.Api
 {
-    /// API controller for managing navigation menus
-    /// All operations restricted to Admin role
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize(Policy = "Admin")]
-    [Produces("application/json")]
+    /// REST API controller for managing navigation menu items (Ananta's module)
+    /// Menus define what sidebar navigation items exist ("Dashboard", "Appointments", etc.)
+    /// They're assigned to individual users through the UserMenus junction table
+    /// All operations require Admin role
+    [ApiController]                       // automatic validation + JSON errors
+    [Route("api/[controller]")]           // base: /api/menusapi
+    [Authorize(Policy = "Admin")]         // admin-only
+    [Produces("application/json")]        // JSON responses
     public class MenusApiController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context; // database access
 
         public MenusApiController(ApplicationDbContext context)
         {
@@ -27,20 +29,20 @@ namespace AppointmentSystem.Web.Controllers.Api
         }
 
         /// GET: api/menusapi
-        /// Returns all menus ordered by display order
+        /// Returns all menu items sorted by display order (the order they appear in the sidebar)
         [HttpGet]
         [ProducesResponseType(typeof(List<MenuDto>), 200)]
         public async Task<ActionResult<List<MenuDto>>> GetAll()
         {
             var menus = await _context.Menus
-                .OrderBy(m => m.DisplayOrder)
-                .Select(m => new MenuDto
+                .OrderBy(m => m.DisplayOrder)              // maintain sidebar ordering
+                .Select(m => new MenuDto                   // project into DTO
                 {
                     Id = m.Id,
-                    MenuName = m.MenuName,
-                    Url = m.Url,
-                    DisplayOrder = m.DisplayOrder,
-                    IsActive = m.IsActive
+                    MenuName = m.MenuName,                 // display name ("Appointments")
+                    Url = m.Url,                           // where it links to ("/Appointments")
+                    DisplayOrder = m.DisplayOrder,         // sort position in the sidebar
+                    IsActive = m.IsActive                  // whether it shows up at all
                 })
                 .ToListAsync();
 
@@ -131,21 +133,25 @@ namespace AppointmentSystem.Web.Controllers.Api
         }
 
         /// DELETE: api/menusapi/{id}
-        /// Permanently deletes a menu item and its user assignments
+        /// Permanently removes a menu item and all user-menu assignments for it
+        /// Must clean up UserMenus junction table first (FK constraint)
         [HttpDelete("{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(204)]   // 204 = deleted
+        [ProducesResponseType(404)]   // 404 = menu not found
         public async Task<IActionResult> Delete(Guid id)
         {
             var menu = await _context.Menus.FindAsync(id);
             if (menu == null) return NotFound(new { message = "Menu not found." });
 
+            // remove all user-menu links first — FK constraint requires this
             var userMenus = await _context.UserMenus.Where(um => um.MenuId == id).ToListAsync();
             _context.UserMenus.RemoveRange(userMenus);
+
+            // now safely delete the menu item itself
             _context.Menus.Remove(menu);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return NoContent();  // 204 = gone
         }
     }
 }

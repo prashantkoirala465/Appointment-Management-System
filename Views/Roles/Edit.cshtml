@@ -1,3 +1,7 @@
+@* ===== EDIT ROLE VIEW =====
+   Pre-filled form for updating an existing role. The hidden Id field is critical
+   so the controller knows which role to update. Same fields as Create. *@
+
 @model AppointmentSystem.Web.Models.Role
 @{
     ViewData["Title"] = "Edit Role";
@@ -12,6 +16,7 @@
     <div class="card-body-custom">
         <form asp-action="Edit" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* hidden Id field — without this the controller can't identify which role to update *@
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">

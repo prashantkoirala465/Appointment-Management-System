@@ -1,3 +1,8 @@
+@* ===== MENUS INDEX VIEW =====
+   Lists all navigation menu items. Each row shows display order, menu name, URL path,
+   how many users have this menu assigned (UserMenus.Count), and Active/Inactive status.
+   The URL column uses a <code> tag for monospace styling. *@
+
 @model IEnumerable<AppointmentSystem.Web.Models.Menu>
 @{
     ViewData["Title"] = "Menus";
@@ -30,13 +35,17 @@
                 </tr>
             </thead>
             <tbody>
+                @* Loop through each menu item and render a row *@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        @* DisplayOrder controls the sort position in the sidebar *@
                         <td>@item.DisplayOrder</td>
                         <td style="font-weight:500;">@item.MenuName</td>
+                        @* <code> tag gives the URL a monospace style to visually stand out *@
                         <td><code style="font-size:var(--font-xs); background:var(--color-bg); padding:2px 6px; border-radius:var(--radius-sm);">@item.Url</code></td>
                         <td>
+                            @* UserMenus.Count shows how many users can see this menu item *@
                             <span class="badge-status badge-default">@item.UserMenus.Count assigned</span>
                         </td>
                         <td>

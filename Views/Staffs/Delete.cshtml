@@ -1,3 +1,8 @@
+@* ===== DELETE STAFF CONFIRMATION VIEW =====
+   Shows the staff member's key info and asks the user to confirm permanent deletion.
+   Red gradient banner visually warns this is a destructive, irreversible action.
+   The form POSTs the hidden Id to StaffsController.DeleteConfirmed(). *@
+
 @model AppointmentSystem.Web.Models.Staff
 @{
     ViewData["Title"] = "Delete Staff";
@@ -29,10 +34,14 @@
             <dd>@(Model.PhoneNumber ?? "—")</dd>
         </dl>
 
+        @* Form POSTs to /Staffs/Delete — controller will remove this staff from the DB *@
         <form asp-action="Delete">
+            @* hidden Id tells the controller which staff to delete *@
             <input type="hidden" asp-for="Id" />
             <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+                @* red button signals a destructive action *@
                 <button type="submit" class="btn-danger-custom">Delete Permanently</button>
+                @* cancel navigates back without deleting anything *@
                 <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
             </div>
         </form>

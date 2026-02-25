@@ -1,6 +1,11 @@
+@* ===== STAFF INDEX VIEW =====
+   Displays all staff members in a responsive table.
+   The controller passes IEnumerable<Staff> — so we loop through each staff and render a row.
+   If there are no staff yet, an empty-state card with a CTA button is shown instead. *@
+
 @model IEnumerable<AppointmentSystem.Web.Models.Staff>
 @{
-    ViewData["Title"] = "Staff";
+    ViewData["Title"] = "Staff"; @* sets the browser tab title *@
 }
 
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-xl); flex-wrap:wrap; gap:var(--space-md);">
@@ -8,12 +13,14 @@
         <h1 class="page-title">Staff</h1>
         <p class="page-subtitle">View and manage your team members.</p>
     </div>
+    @* asp-action="Create" generates the link to /Staffs/Create via the tag helper *@
     <a class="btn-primary-custom" asp-action="Create">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add Staff
     </a>
 </div>
 
+@* -- Only render table if there are staff members, else show empty state -- *@
 @if (Model.Any())
 {
     <div class="card-custom">
@@ -26,18 +33,21 @@
                     <th>Phone</th>
                     <th>Specialty</th>
                     <th>Status</th>
-                    <th></th>
+                    <th></th> @* empty header for action links *@
                 </tr>
             </thead>
             <tbody>
+                @* Loop through each staff member and create a table row *@
                 @foreach (var item in Model)
                 {
                     <tr>
                         <td style="font-weight:500;">@item.FullName</td>
+                        @* null-coalescing: show dash if email is missing *@
                         <td>@(item.Email ?? "—")</td>
                         <td>@(item.PhoneNumber ?? "—")</td>
                         <td>@(item.Specialty ?? "—")</td>
                         <td>
+                            @* Show green "Active" or grey "Inactive" badge based on IsActive bool *@
                             @if (item.IsActive)
                             {
                                 <span class="badge-status badge-active">Active</span>
@@ -48,6 +58,7 @@
                             }
                         </td>
                         <td>
+                            @* asp-route-id appends the staff Id to the URL => /Staffs/Edit/3 *@
                             <div class="action-links">
                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
@@ -63,6 +74,7 @@
 }
 else
 {
+    @* --- Empty state: shown when no staff exist in the database yet --- *@
     <div class="card-custom">
         <div class="empty-state">
             <div class="empty-state-icon">

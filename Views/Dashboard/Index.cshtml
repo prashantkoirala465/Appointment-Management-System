@@ -1,7 +1,19 @@
+@* 
+    Dashboard/Index.cshtml — Main dashboard page (Anupam's module)
+    This is the first page users see after logging in.
+    Displays: greeting, quick action buttons, stat cards, and recent appointments table.
+    
+    The @model directive tells Razor what type of data this page receives
+    from DashboardController.Index() — it's a DashboardViewModel with all the stats.
+*@
 @model AppointmentSystem.Web.Models.DashboardViewModel
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Dashboard"; @* sets the <title> tag in _Layout *@
+    
+    @* extract the user's first name from their claims for the greeting *@
     var firstName = User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value?.Split(' ').FirstOrDefault() ?? User.Identity?.Name ?? "there";
+    
+    @* time-based greeting: morning/afternoon/evening *@
     var hour = DateTime.Now.Hour;
     var greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 }
@@ -12,16 +24,20 @@
     @DateTime.Now.ToString("dddd, MMMM d, yyyy")
 </p>
 
+@* Pending approvals banner — only shows if staff registrations are waiting *@
 <!-- Quick Actions -->
 @if (Model.PendingApprovals > 0)
 {
+    @* Yellow warning banner with a "Review Now" button linking to the Users page *@
     <div class="card-custom" style="background:linear-gradient(135deg, #fef5e7, #fdebd0); border-left:4px solid var(--color-warning, #d4ac0d); margin-bottom:var(--space-xl); padding:var(--space-lg);">
         <div style="display:flex; align-items:center; gap:var(--space-md); flex-wrap:wrap;">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4ac0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             <div style="flex:1;">
+                @* Pluralize "registration" vs "registrations" *@
                 <strong style="font-size:var(--font-base);">@Model.PendingApprovals pending registration@(Model.PendingApprovals > 1 ? "s" : "") awaiting approval</strong>
                 <p style="margin:0; font-size:var(--font-sm); color:var(--color-text-muted);">New staff members have signed up and need your review.</p>
             </div>
+            @* asp- tag helpers generate a proper URL to the Users controller *@
             <a asp-controller="Users" asp-action="Index" class="btn-primary-custom btn-sm-custom">Review Now</a>
         </div>
     </div>
@@ -94,6 +110,11 @@
     </div>
 </div>
 
+@* 
+    Recent Appointments table — shows the 5 most recent appointments
+    Uses Model.RecentAppointments which is loaded by DashboardController
+    with eager-loading (Include) for the Staff relationship
+*@
 <!-- Recent Appointments -->
 <div class="card-custom">
     <div class="card-header-custom">
@@ -115,15 +136,17 @@
                 </tr>
             </thead>
             <tbody>
+                @* loop through each recent appointment and render a table row *@
                 @foreach (var appt in Model.RecentAppointments)
                 {
+                    @* C# switch expression to pick the right CSS class for the status badge *@
                     var cls = appt.Status switch
                     {
                         "Scheduled" => "badge-scheduled",
                         "Completed" => "badge-completed",
                         "Cancelled" => "badge-cancelled",
                         "No-Show"   => "badge-noshow",
-                        _           => "badge-default"
+                        _           => "badge-default"     @* fallback for unknown statuses *@
                     };
                     <tr>
                         <td style="font-weight:500;">@appt.ClientName</td>

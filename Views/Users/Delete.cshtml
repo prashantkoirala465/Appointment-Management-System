@@ -1,3 +1,8 @@
+@* ===== DELETE USER CONFIRMATION VIEW =====
+   Shows the user's key details (name, username, email, roles) before permanent deletion.
+   The warning message explains that this also removes role assignments and menu access.
+   Roles are displayed using string.Join on the UserRoles navigation property. *@
+
 @model AppointmentSystem.Web.Models.User
 @{
     ViewData["Title"] = "Delete User";
@@ -29,6 +34,7 @@
 
             <dt>Roles</dt>
             <dd>
+                @* Show all assigned roles as a comma-separated string *@
                 @if (Model.UserRoles.Any())
                 {
                     @string.Join(", ", Model.UserRoles.Select(ur => ur.Role?.RoleName))
@@ -40,6 +46,7 @@
             </dd>
         </dl>
 
+        @* Form POSTs to /Users/Delete — controller also removes UserRoles and UserMenus records *@
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" />
             <div class="btn-group-custom" style="margin-top:var(--space-lg);">

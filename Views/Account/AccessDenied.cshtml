@@ -1,7 +1,14 @@
+@*
+    Account/AccessDenied.cshtml — 403 Forbidden page (Ananta's module)
+    Shown when a logged-in user tries to access a page they don't have permission for.
+    For example, a Staff user trying to access /Users (which requires Admin role).
+    ASP.NET Core redirects here automatically when [Authorize(Roles = "Admin")] fails.
+*@
 @{
     ViewData["Title"] = "Access Denied";
 }
 
+@* Simple centered error page with a 403 code, message, and a link back to the dashboard *@
 <div class="error-page">
     <div class="error-code">403</div>
     <h2>Access Denied</h2>
@@ -9,5 +16,6 @@
         You don't have permission to view this page.
         Contact your administrator if you believe this is an error.
     </p>
+    @* asp-controller/asp-action tag helpers generate the correct URL *@
     <a class="btn-primary-custom" asp-controller="Dashboard" asp-action="Index">Back to Dashboard</a>
 </div>

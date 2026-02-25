@@ -1,3 +1,9 @@
+@*
+    Shared/Error.cshtml — Generic error page
+    Displayed when an unhandled exception occurs in production.
+    In development mode, the Developer Exception Page is shown instead (configured in Program.cs).
+    Uses ErrorViewModel which has RequestId and ShowRequestId properties.
+*@
 @model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
@@ -8,6 +14,8 @@
     <h1>Something went wrong</h1>
     <p>An unexpected error occurred while processing your request.</p>
 
+    @* Show the request ID for debugging — helps trace issues in logs *@
+    @* ShowRequestId is a computed property: returns true if RequestId is not null/empty *@
     @if (Model.ShowRequestId)
     {
         <p style="font-size:var(--font-xs); color:var(--color-text-muted); margin-top:var(--space-lg);">

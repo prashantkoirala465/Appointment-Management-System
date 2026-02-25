@@ -1,3 +1,8 @@
+@* ===== DELETE APPOINTMENT CONFIRMATION VIEW =====
+   Shows appointment summary and asks the user to confirm permanent deletion.
+   Uses a red gradient banner to visually warn that this is a destructive action.
+   The form POSTs the hidden Id to AppointmentsController.DeleteConfirmed(). *@
+
 @model AppointmentSystem.Web.Models.Appointment
 @{
     ViewData["Title"] = "Delete Appointment";
@@ -32,10 +37,14 @@
             <dd>@Model.Status</dd>
         </dl>
 
+        @* The form POSTs to /Appointments/Delete — controller looks up the Id and removes it from DB *@
         <form asp-action="Delete">
+            @* hidden field carries the appointment Id so the controller knows which record to delete *@
             <input type="hidden" asp-for="Id" />
             <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+                @* red button to make it clear this is a destructive/irreversible action *@
                 <button type="submit" class="btn-danger-custom">Delete Permanently</button>
+                @* cancel just goes back to the list — nothing is deleted *@
                 <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
             </div>
         </form>

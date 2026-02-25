@@ -1,3 +1,7 @@
+@* ===== ADD ROLE VIEW =====
+   Simple form to create a new role. RoleName is required (validated by model annotations).
+   Description is optional. The IsActive checkbox controls whether this role is usable. *@
+
 @model AppointmentSystem.Web.Models.Role
 @{
     ViewData["Title"] = "Add Role";
@@ -10,6 +14,7 @@
 
 <div class="card-custom" style="max-width:540px;">
     <div class="card-body-custom">
+        @* POSTs to /Roles/Create — controller checks for duplicate names before saving *@
         <form asp-action="Create" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -25,6 +30,7 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
+            @* IsActive checkbox — determines if users with this role get its permissions *@
             <div class="form-group">
                 <div class="form-check-custom">
                     <input asp-for="IsActive" />

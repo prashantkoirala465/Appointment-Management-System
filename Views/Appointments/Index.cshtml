@@ -1,19 +1,26 @@
+@* ===== APPOINTMENTS INDEX VIEW =====
+   Lists all appointments in a styled table. The model is a collection of Appointment entities
+   passed by AppointmentsController.Index(). If no appointments exist, shows an empty state CTA. *@
+
 @model IEnumerable<AppointmentSystem.Web.Models.Appointment>
 @{
-    ViewData["Title"] = "Appointments";
+    ViewData["Title"] = "Appointments"; @* sets the <title> tag via _Layout.cshtml *@
 }
 
+@* -- Page header row: title on the left, "New Appointment" button on the right -- *@
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-xl); flex-wrap:wrap; gap:var(--space-md);">
     <div>
         <h1 class="page-title">Appointments</h1>
         <p class="page-subtitle">Manage and track all scheduled appointments.</p>
     </div>
+    @* asp-action="Create" generates href="/Appointments/Create" via tag helper *@
     <a class="btn-primary-custom" asp-action="Create">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New Appointment
     </a>
 </div>
 
+@* -- Only render the table if there are appointments, otherwise show empty state -- *@
 @if (Model.Any())
 {
     <div class="card-custom">
@@ -26,27 +33,32 @@
                     <th>Date &amp; Time</th>
                     <th>Duration</th>
                     <th>Status</th>
-                    <th></th>
+                    <th></th> @* empty header for the actions column *@
                 </tr>
             </thead>
             <tbody>
+                @* Loop through each appointment and render a table row *@
                 @foreach (var item in Model)
                 {
+                    @* C# switch expression: pick the right CSS class for the status badge *@
                     var cls = item.Status switch
                     {
                         "Scheduled" => "badge-scheduled",
                         "Completed" => "badge-completed",
                         "Cancelled" => "badge-cancelled",
                         "No-Show"   => "badge-noshow",
-                        _           => "badge-default"
+                        _           => "badge-default"  @* fallback for any unexpected status *@
                     };
                     <tr>
                         <td style="font-weight:500;">@item.ClientName</td>
+                        @* null-safe: if Staff nav prop wasn't loaded, show dash *@
                         <td>@(item.Staff?.FullName ?? "—")</td>
                         <td>@item.StartTime.ToString("MMM dd, yyyy  h:mm tt")</td>
                         <td>@item.DurationMinutes min</td>
+                        @* badge-status + dynamic class gives each status a unique color *@
                         <td><span class="badge-status @cls">@item.Status</span></td>
                         <td>
+                            @* asp-route-id passes the appointment's Id as a route value => /Appointments/Edit/5 *@
                             <div class="action-links">
                                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
@@ -62,6 +74,7 @@
 }
 else
 {
+    @* --- Empty-state card: shown when no appointments exist yet --- *@
     <div class="card-custom">
         <div class="empty-state">
             <div class="empty-state-icon">

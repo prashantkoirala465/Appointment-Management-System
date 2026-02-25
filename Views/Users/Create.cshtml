@@ -1,3 +1,8 @@
+@* ===== ADD USER VIEW =====
+   Uses UserFormViewModel (not the User entity directly) because we also need
+   Roles[] and Menus[] checkbox lists. The admin can create a user, set their password,
+   and immediately assign roles and menu access all in one form. *@
+
 @model AppointmentSystem.Web.Models.UserFormViewModel
 @{
     ViewData["Title"] = "Add User";
@@ -45,6 +50,10 @@
                 </div>
             </div>
 
+            @* --- ROLES CHECKBOXES ---
+               Loops through all roles and renders a checkbox for each.
+               The hidden fields for RoleId and RoleName ensure the model binder can
+               reconstruct the full Roles list on POST, even for unchecked items. *@
             @if (Model.Roles.Any())
             {
                 <div class="form-group">
@@ -52,9 +61,11 @@
                     <div class="checkbox-group">
                         @for (int i = 0; i < Model.Roles.Count; i++)
                         {
+                            @* Hidden fields carry the RoleId and RoleName even if the checkbox is unchecked *@
                             <input type="hidden" asp-for="Roles[i].RoleId" />
                             <input type="hidden" asp-for="Roles[i].RoleName" />
                             <label class="checkbox-item">
+                                @* The IsSelected checkbox determines whether this role is assigned *@
                                 <input type="checkbox" asp-for="Roles[i].IsSelected" />
                                 @Model.Roles[i].RoleName
                             </label>
@@ -63,6 +74,9 @@
                 </div>
             }
 
+            @* --- MENUS CHECKBOXES ---
+               Same pattern as roles: hidden fields + checkbox for each menu item.
+               Checked menus will appear in the user's sidebar navigation. *@
             @if (Model.Menus.Any())
             {
                 <div class="form-group">

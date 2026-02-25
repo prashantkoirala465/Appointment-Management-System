@@ -1,25 +1,43 @@
+@* 
+    _Layout.cshtml — The master layout template for the ENTIRE application
+    Every page inherits from this layout (set in _ViewStart.cshtml)
+    
+    Two layout modes:
+    1. Authenticated users → sidebar + main content area (dashboard-style)
+    2. Public visitors → full-width layout (landing page, login, register)
+    
+    The @RenderBody() call is where each page's content gets injected
+*@
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @* Page title: each page sets ViewData["Title"], we append "— Appointra" *@
     <title>@ViewData["Title"] — Appointra</title>
+    @* asp-append-version="true" adds a cache-busting query string (?v=hash) *@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
 
+@* Check if the user is logged in — this decides which layout to show *@
 @if (User.Identity != null && User.Identity.IsAuthenticated)
 {
-    @* ========== AUTHENTICATED: Sidebar + Content ========== *@
+    @* ========== AUTHENTICATED LAYOUT: Sidebar + Content ========== *@
+    @* This wraps everything in a CSS grid: sidebar on left, content on right *@
     <div class="layout-app">
+        @* Mobile-only header with hamburger menu button *@
         <div class="mobile-header">
             <span class="brand-mobile">appointra</span>
             <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</button>
         </div>
 
+        @* Dark overlay that appears behind the sidebar on mobile (click to close) *@
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
+        @* ====== SIDEBAR NAVIGATION ====== *@
         <aside class="sidebar" id="sidebar">
+            @* Brand logo — links back to dashboard *@
             <div class="sidebar-brand">
                 <a asp-controller="Dashboard" asp-action="Index">
                     appointra
@@ -27,8 +45,10 @@
                 </a>
             </div>
 
+            @* Navigation links — Dashboard is always shown *@
             <ul class="sidebar-nav">
                 <li>
+                    @* Highlight the Dashboard link when we're on the Dashboard controller *@
                     <a href="@Url.Action("Index", "Dashboard")"
                        class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
@@ -36,6 +56,8 @@
                     </a>
                 </li>
 
+                @* Dynamic menu items — loaded by MenuLoaderFilter for the current user *@
+                @* Each user sees different menus based on their UserMenus assignments *@
                 @if (ViewData["UserMenus"] is List<AppointmentSystem.Web.Models.Menu> userMenus && userMenus.Any())
                 {
                     <li><span class="nav-section">Navigation</span></li>
@@ -75,16 +97,21 @@
                 }
             </ul>
 
+            @* ====== SIDEBAR FOOTER: User info + Sign Out ====== *@
             <div class="sidebar-footer">
                 <div class="sidebar-user">
+                    @* Avatar shows the first letter of the username *@
                     <div class="sidebar-avatar">
                         @(User.Identity.Name?.Substring(0, 1).ToUpper())
                     </div>
                     <div class="sidebar-user-info">
+                        @* Display the user's full name from their claims *@
                         <div class="sidebar-user-name">@(User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value ?? User.Identity.Name)</div>
+                        @* Show "Administrator" or "Staff" based on role *@
                         <div class="sidebar-user-role">@(User.IsInRole("Admin") ? "Administrator" : "Staff")</div>
                     </div>
                 </div>
+                @* Sign out button — posts to AccountController.Logout *@
                 <div class="sidebar-logout">
                     <form asp-controller="Account" asp-action="Logout" method="post">
                         <button type="submit">Sign Out</button>
@@ -93,6 +120,8 @@
             </div>
         </aside>
 
+        @* ====== MAIN CONTENT AREA ====== *@
+        @* @RenderBody() injects whatever page the user navigated to *@
         <div class="main-content">
             <div class="content-body">
                 @RenderBody()
@@ -102,16 +131,22 @@
 }
 else
 {
-    @* ========== PUBLIC: Landing / Login / Error ========== *@
+    @* ========== PUBLIC LAYOUT: No sidebar, full-width ========== *@
+    @* Used for landing page, login, register, and error pages *@
     <div class="layout-public">
         @RenderBody()
     </div>
 }
 
+    @* ====== SCRIPTS ====== *@
+    @* jQuery is needed for the unobtrusive validation library used by ASP.NET MVC forms *@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    @* Client-side validation that matches the [Required], [EmailAddress] etc. data annotations *@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js" crossorigin="anonymous"></script>
+    @* Our custom JS — handles sidebar toggle, scroll animations, etc. *@
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @* Optional scripts section — pages can inject additional JS here *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

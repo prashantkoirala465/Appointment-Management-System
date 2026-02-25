@@ -10,10 +10,15 @@ using Microsoft.EntityFrameworkCore;
 namespace AppointmentSystem.Web.Controllers
 {
     /// Admin controller for managing user accounts
-    /// Handles CRUD operations plus role and menu assignments for each user
-    [Authorize(Roles = "Admin")]
+    /// This is one of the most complex controllers because it handles:
+    ///   1. CRUD for user accounts
+    ///   2. Role assignments (which roles a user has)
+    ///   3. Menu assignments (which sidebar items a user sees)
+    ///   4. Approve/Reject workflow for staff registrations
+    [Authorize(Roles = "Admin")] // only admins can manage users
     public class UsersController : Controller
     {
+        // database context injected through dependency injection
         private readonly ApplicationDbContext _context;
 
         public UsersController(ApplicationDbContext context)
@@ -22,28 +27,30 @@ namespace AppointmentSystem.Web.Controllers
         }
 
         // GET: /Users
-        // Lists all users with their assigned roles
+        // Lists all users with their assigned roles in a table
         public async Task<IActionResult> Index()
         {
             var users = await _context.Users
-                .Include(u => u.UserRoles)
-                    .ThenInclude(ur => ur.Role)
-                .OrderByDescending(u => !u.IsApproved) // Pending users first
-                .ThenBy(u => u.FullName)
+                .Include(u => u.UserRoles)       // eager-load the user-role junction entries
+                    .ThenInclude(ur => ur.Role)   // also load the actual Role entity for each
+                .OrderByDescending(u => !u.IsApproved) // trick: unapproved (pending) users float to top
+                .ThenBy(u => u.FullName)          // within each group, sort alphabetically
                 .ToListAsync();
 
             return View(users);
         }
 
         // POST: /Users/Approve/5
-        // Approves a pending staff registration so they can log in
+        // When a staff member registers, their account starts as unapproved (IsApproved = false)
+        // An admin clicks "Approve" to flip that flag so the staff can log in
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] // CSRF protection
         public async Task<IActionResult> Approve(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound();
 
+            // just flip the flag — that's all it takes to let them log in
             user.IsApproved = true;
             await _context.SaveChangesAsync();
 
@@ -51,11 +58,13 @@ namespace AppointmentSystem.Web.Controllers
         }
 
         // POST: /Users/Reject/5
-        // Rejects (deletes) a pending staff registration
+        // Admin doesn't want this staff member — delete their registration entirely
+        // We also have to remove their role and menu assignments because of foreign key constraints
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(Guid id)
         {
+            // load the user along with their role and menu assignments
             var user = await _context.Users
                 .Include(u => u.UserRoles)
                 .Include(u => u.UserMenus)
@@ -63,8 +72,10 @@ namespace AppointmentSystem.Web.Controllers
 
             if (user == null) return NotFound();
 
+            // clean up junction table records first (FK constraint requires this)
             _context.UserRoles.RemoveRange(user.UserRoles);
             _context.UserMenus.RemoveRange(user.UserMenus);
+            // now we can safely delete the user
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
@@ -81,47 +92,50 @@ namespace AppointmentSystem.Web.Controllers
         }
 
         // POST: /Users/Create
-        // Creates a new user and assigns selected roles and menus
+        // Processes the form, creates the user, then assigns whatever roles and menus the admin checked
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] // CSRF protection
         public async Task<IActionResult> Create(UserFormViewModel model)
         {
-            // Password is required when creating a new user
+            // manual validation: password is required for new accounts
+            // (on edit, leaving password blank means "don't change it")
             if (string.IsNullOrWhiteSpace(model.Password))
             {
                 ModelState.AddModelError("Password", "Password is required for new users.");
             }
 
+            // if validation failed, re-populate the checkboxes and show the form again
             if (!ModelState.IsValid)
             {
                 await PopulateAssignments(model);
                 return View(model);
             }
 
-            // Check for duplicate username
+            // make sure no one else already has this username
             if (await _context.Users.AnyAsync(u => u.Username == model.Username))
             {
                 ModelState.AddModelError("Username", "This username is already taken.");
-                await PopulateAssignments(model);
+                await PopulateAssignments(model); // reload checkboxes again
                 return View(model);
             }
 
+            // build the new user entity
             var user = new User
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid(),                // generate a unique ID
                 FullName = model.FullName,
                 Username = model.Username,
                 Email = model.Email,
-                PasswordHash = AccountController.HashPassword(model.Password!),
+                PasswordHash = AccountController.HashPassword(model.Password!), // SHA-256 hash
                 IsActive = model.IsActive,
-                IsApproved = true, // Admin-created users are automatically approved
-                CreatedAtUtc = DateTime.UtcNow
+                IsApproved = true,                   // admin-created users skip the approval step
+                CreatedAtUtc = DateTime.UtcNow       // track when the account was created
             };
 
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // save so the user gets an ID in the database
 
-            // Assign selected roles
+            // now create junction records for every role checkbox that was ticked
             foreach (var role in model.Roles.Where(r => r.IsSelected))
             {
                 _context.UserRoles.Add(new UserRole
@@ -132,7 +146,7 @@ namespace AppointmentSystem.Web.Controllers
                 });
             }
 
-            // Assign selected menus
+            // same for menu checkboxes — determines which sidebar items this user sees
             foreach (var menu in model.Menus.Where(m => m.IsSelected))
             {
                 _context.UserMenus.Add(new UserMenu
@@ -143,7 +157,7 @@ namespace AppointmentSystem.Web.Controllers
                 });
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // save roles + menus in one batch
             return RedirectToAction(nameof(Index));
         }
 
@@ -174,19 +188,22 @@ namespace AppointmentSystem.Web.Controllers
         }
 
         // POST: /Users/Edit/5
-        // Updates the user and syncs role and menu assignments
+        // This is the most complex action — updates user info AND syncs role/menu assignments
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, UserFormViewModel model)
         {
+            // safety check: URL id must match the form's hidden id field
             if (id != model.Id) return NotFound();
 
             if (!ModelState.IsValid)
             {
-                await PopulateAssignments(model);
+                await PopulateAssignments(model); // re-load checkboxes so the form still works
                 return View(model);
             }
 
+            // load the user along with their current role and menu assignments
+            // we need these loaded so we can delete the old ones before saving new ones
             var user = await _context.Users
                 .Include(u => u.UserRoles)
                 .Include(u => u.UserMenus)
@@ -194,7 +211,7 @@ namespace AppointmentSystem.Web.Controllers
 
             if (user == null) return NotFound();
 
-            // Check for duplicate username (excluding current user)
+            // prevent duplicate usernames, but exclude this user's own current username
             if (await _context.Users.AnyAsync(u => u.Username == model.Username && u.Id != id))
             {
                 ModelState.AddModelError("Username", "This username is already taken.");
@@ -202,19 +219,22 @@ namespace AppointmentSystem.Web.Controllers
                 return View(model);
             }
 
-            // Update basic fields
+            // update the basic text fields from the form
             user.FullName = model.FullName;
             user.Username = model.Username;
             user.Email = model.Email;
             user.IsActive = model.IsActive;
 
-            // Update password only if a new one was provided
+            // only update password if admin typed a new one
+            // blank = leave the existing password unchanged
             if (!string.IsNullOrWhiteSpace(model.Password))
             {
                 user.PasswordHash = AccountController.HashPassword(model.Password);
             }
 
-            // Sync roles: remove old, add new
+            // --- ROLE SYNC ---
+            // strategy: delete ALL existing role assignments, then re-create from the checked boxes
+            // this "delete-all-then-insert" approach is simpler than diffing
             _context.UserRoles.RemoveRange(user.UserRoles);
             foreach (var role in model.Roles.Where(r => r.IsSelected))
             {
@@ -226,7 +246,8 @@ namespace AppointmentSystem.Web.Controllers
                 });
             }
 
-            // Sync menus: remove old, add new
+            // --- MENU SYNC ---
+            // same pattern: wipe existing menu assignments, re-create from checkboxes
             _context.UserMenus.RemoveRange(user.UserMenus);
             foreach (var menu in model.Menus.Where(m => m.IsSelected))
             {
@@ -238,6 +259,7 @@ namespace AppointmentSystem.Web.Controllers
                 });
             }
 
+            // save everything — user fields + role changes + menu changes — in one transaction
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -259,11 +281,12 @@ namespace AppointmentSystem.Web.Controllers
         }
 
         // POST: /Users/Delete/5
-        // Permanently deletes the user and their role/menu assignments
-        [HttpPost, ActionName("Delete")]
+        // permanently deletes the user account and cleans up all junction table records
+        [HttpPost, ActionName("Delete")] // maps this method to the Delete action URL
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            // load user with all their assignments so we can clean them up
             var user = await _context.Users
                 .Include(u => u.UserRoles)
                 .Include(u => u.UserMenus)
@@ -271,8 +294,10 @@ namespace AppointmentSystem.Web.Controllers
 
             if (user != null)
             {
+                // must delete junction records first — FK constraint would block the user delete
                 _context.UserRoles.RemoveRange(user.UserRoles);
                 _context.UserMenus.RemoveRange(user.UserMenus);
+                // now safely delete the user
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
             }
@@ -280,31 +305,36 @@ namespace AppointmentSystem.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Loads all available roles and menus into the view model
-        // If existing assignments are provided, marks those as selected
+        /// Helper method: loads all active roles and menus into the view model as checkbox lists
+        /// Used by both Create and Edit actions so the admin can tick which roles/menus to assign
+        /// If existingRoles/existingMenus are provided (Edit mode), those checkboxes come pre-ticked
         private async Task PopulateAssignments(
             UserFormViewModel model,
             ICollection<UserRole>? existingRoles = null,
             ICollection<UserMenu>? existingMenus = null)
         {
+            // grab all active roles and menus from the database
             var allRoles = await _context.Roles.Where(r => r.IsActive).OrderBy(r => r.RoleName).ToListAsync();
             var allMenus = await _context.Menus.Where(m => m.IsActive).OrderBy(m => m.DisplayOrder).ToListAsync();
 
+            // build a HashSet of IDs for O(1) lookup when marking checkboxes
             var assignedRoleIds = existingRoles?.Select(r => r.RoleId).ToHashSet() ?? new HashSet<Guid>();
             var assignedMenuIds = existingMenus?.Select(m => m.MenuId).ToHashSet() ?? new HashSet<Guid>();
 
+            // project each role into a RoleAssignment DTO with IsSelected = true if already assigned
             model.Roles = allRoles.Select(r => new RoleAssignment
             {
                 RoleId = r.Id,
                 RoleName = r.RoleName,
-                IsSelected = assignedRoleIds.Contains(r.Id)
+                IsSelected = assignedRoleIds.Contains(r.Id) // pre-tick if user already has this role
             }).ToList();
 
+            // same for menus
             model.Menus = allMenus.Select(m => new MenuAssignment
             {
                 MenuId = m.Id,
                 MenuName = m.MenuName,
-                IsSelected = assignedMenuIds.Contains(m.Id)
+                IsSelected = assignedMenuIds.Contains(m.Id) // pre-tick if user already has this menu
             }).ToList();
         }
     }

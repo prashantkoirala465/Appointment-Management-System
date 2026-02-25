@@ -1,3 +1,7 @@
+@* ===== EDIT APPOINTMENT VIEW =====
+   Almost identical to Create, but the form is pre-filled with existing appointment data.
+   The hidden Id field is critical — it tells the controller WHICH appointment to update. *@
+
 @model AppointmentSystem.Web.Models.Appointment
 @{
     ViewData["Title"] = "Edit Appointment";
@@ -10,8 +14,10 @@
 
 <div class="card-custom" style="max-width:640px;">
     <div class="card-body-custom">
+        @* POSTs to /Appointments/Edit — the controller matches the Id from the hidden field *@
         <form asp-action="Edit" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* IMPORTANT: hidden Id field — without this the controller won't know which record to update *@
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
@@ -77,6 +83,7 @@
     </div>
 </div>
 
+@* Load client-side validation scripts so the form checks required fields before submitting *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

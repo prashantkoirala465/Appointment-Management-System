@@ -1,1 +1,9 @@
+@*
+    _ValidationScriptsPartial.cshtml — Client-side validation script loader
+    Included by views that have forms with data annotations ([Required], [EmailAddress], etc.)
+    Usage: @section Scripts { @await Html.PartialAsync("_ValidationScriptsPartial") }
+    
+    The actual jQuery + validation scripts are loaded from CDN in _Layout.cshtml,
+    so this partial is just here for ASP.NET Core scaffold compatibility.
+*@
 <!-- Scripts are loaded from CDN in _Layout.cshtml. Keeping this partial for scaffold compatibility. -->

@@ -1,3 +1,8 @@
+@* ===== DELETE ROLE CONFIRMATION VIEW =====
+   Shows the role details and warns that deletion is permanent.
+   Also shows how many users have this role assigned (UserRoles.Count).
+   The form POSTs the hidden Id to RolesController.DeleteConfirmed(). *@
+
 @model AppointmentSystem.Web.Models.Role
 @{
     ViewData["Title"] = "Delete Role";
@@ -17,6 +22,7 @@
         <p style="font-size:var(--font-sm); color:#96281b;">This will remove the role and unassign it from all users.</p>
     </div>
     <div class="card-body-custom">
+        @* Shows key role info so the user can verify they're deleting the right one *@
         <dl class="detail-grid">
             <dt>Role Name</dt>
             <dd>@Model.RoleName</dd>
@@ -25,9 +31,11 @@
             <dd>@(Model.Description ?? "—")</dd>
 
             <dt>Assigned Users</dt>
+            @* this count warns how many users will lose this role if deleted *@
             <dd>@Model.UserRoles.Count</dd>
         </dl>
 
+        @* Form POSTs to /Roles/Delete — controller also cleans up UserRoles junction records *@
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" />
             <div class="btn-group-custom" style="margin-top:var(--space-lg);">

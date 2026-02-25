@@ -1,3 +1,8 @@
+@* ===== USERS INDEX VIEW =====
+   Lists all user accounts with their roles, approval status, and active status.
+   Shows Approve/Reject inline buttons for unapproved users (registration workflow).
+   Roles are displayed as green badges pulled from the UserRoles navigation property. *@
+
 @model IEnumerable<AppointmentSystem.Web.Models.User>
 @{
     ViewData["Title"] = "Users";
@@ -31,6 +36,7 @@
                 </tr>
             </thead>
             <tbody>
+                @* Loop through each user and build a table row *@
                 @foreach (var item in Model)
                 {
                     <tr>
@@ -38,6 +44,7 @@
                         <td>@item.Username</td>
                         <td>@(item.Email ?? "—")</td>
                         <td>
+                            @* Show all assigned roles as green badges, or "No roles" if none *@
                             @if (item.UserRoles.Any())
                             {
                                 @foreach (var ur in item.UserRoles)
@@ -51,6 +58,7 @@
                             }
                         </td>
                         <td>
+                            @* Approval status — users must be approved by admin after registration *@
                             @if (item.IsApproved)
                             {
                                 <span class="badge-status badge-active">Approved</span>
@@ -61,6 +69,7 @@
                             }
                         </td>
                         <td>
+                            @* Active/Inactive — admins can deactivate users without deleting them *@
                             @if (item.IsActive)
                             {
                                 <span class="badge-status badge-active">Active</span>
@@ -72,11 +81,14 @@
                         </td>
                         <td>
                             <div class="action-links">
+                                @* Show Approve/Reject buttons only for unapproved users (registration workflow) *@
                                 @if (!item.IsApproved)
                                 {
+                                    @* Approve form: POSTs to /Users/Approve/{id} to set IsApproved = true *@
                                     <form asp-action="Approve" asp-route-id="@item.Id" method="post" style="display:inline;">
                                         <button type="submit" class="btn-primary-custom btn-sm-custom" style="padding:4px 12px; font-size:var(--font-xs);">Approve</button>
                                     </form>
+                                    @* Reject form: POSTs to /Users/Reject/{id} which deletes the user entirely *@
                                     <form asp-action="Reject" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('Reject and delete this user?');">
                                         <button type="submit" class="btn-danger-custom btn-sm-custom" style="padding:4px 12px; font-size:var(--font-xs);">Reject</button>
                                     </form>

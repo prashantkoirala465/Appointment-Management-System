@@ -1,3 +1,8 @@
+@* ===== EDIT USER VIEW =====
+   Uses UserFormViewModel for editing. Same role/menu checkbox pattern as Create.
+   Password field is optional here — leaving it blank keeps the existing password hash.
+   The hidden Id field is critical so the controller knows which user to update. *@
+
 @model AppointmentSystem.Web.Models.UserFormViewModel
 @{
     ViewData["Title"] = "Edit User";
@@ -12,6 +17,7 @@
     <div class="card-body-custom">
         <form asp-action="Edit" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* hidden Id — tells the controller which user record to update *@
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
@@ -33,6 +39,7 @@
                 </div>
             </div>
 
+            @* Password is OPTIONAL on edit — leave blank to keep the existing password *@
             <div class="form-group">
                 <label asp-for="Password">New Password</label>
                 <input asp-for="Password" class="form-input" placeholder="Leave blank to keep current password" />
@@ -47,6 +54,8 @@
                 </div>
             </div>
 
+            @* --- ROLES CHECKBOXES (same indexed pattern as Create) ---
+               Hidden fields ensure the model binder reconstructs the entire list on POST. *@
             @if (Model.Roles.Any())
             {
                 <div class="form-group">
@@ -65,6 +74,7 @@
                 </div>
             }
 
+            @* --- MENUS CHECKBOXES --- *@
             @if (Model.Menus.Any())
             {
                 <div class="form-group">

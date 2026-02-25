@@ -1,3 +1,8 @@
+@* ===== EDIT STAFF VIEW =====
+   Pre-filled form for updating an existing staff member.
+   The hidden Id field ensures the controller knows which record to update.
+   Same structure as Create but with existing values pre-populated by model binding. *@
+
 @model AppointmentSystem.Web.Models.Staff
 @{
     ViewData["Title"] = "Edit Staff";
@@ -10,8 +15,10 @@
 
 <div class="card-custom" style="max-width:540px;">
     <div class="card-body-custom">
+        @* POSTs to /Staffs/Edit — controller uses the hidden Id to find and update the record *@
         <form asp-action="Edit" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* CRITICAL: hidden Id field — without this the controller can't find the record to update *@
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">

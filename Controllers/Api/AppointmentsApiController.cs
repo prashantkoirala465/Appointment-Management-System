@@ -11,15 +11,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Web.Controllers.Api
 {
-    /// API controller for managing appointments
-    /// Provides full CRUD operations for the appointment resource
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    [Produces("application/json")]
+    /// REST API controller for appointments (Prashant's module)
+    /// Provides full CRUD operations as a RESTful resource:
+    ///   GET    /api/appointmentsapi       → list all appointments
+    ///   GET    /api/appointmentsapi/{id}   → get one appointment
+    ///   POST   /api/appointmentsapi        → create new appointment
+    ///   PUT    /api/appointmentsapi/{id}   → update an appointment
+    ///   DELETE /api/appointmentsapi/{id}   → delete an appointment
+    /// All endpoints require authentication (cookie or JWT Bearer token)
+    [ApiController]                   // enables automatic model validation + problem details
+    [Route("api/[controller]")]       // base route: /api/appointmentsapi
+    [Authorize]                       // must be logged in (any role)
+    [Produces("application/json")]    // tells Swagger all responses are JSON
     public class AppointmentsApiController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context; // EF Core database context
 
         public AppointmentsApiController(ApplicationDbContext context)
         {
@@ -27,32 +33,33 @@ namespace AppointmentSystem.Web.Controllers.Api
         }
 
         /// GET: api/appointmentsapi
-        /// Returns all appointments with their assigned staff member names
+        /// Returns ALL appointments, newest first, with staff member info included
+        /// This is the main listing endpoint — the frontend table or a mobile app calls this
         [HttpGet]
-        [ProducesResponseType(typeof(List<AppointmentDto>), 200)]
+        [ProducesResponseType(typeof(List<AppointmentDto>), 200)] // Swagger: documents the response shape
         public async Task<ActionResult<List<AppointmentDto>>> GetAll()
         {
             var appointments = await _context.Appointments
-                .Include(a => a.Staff)
-                .OrderByDescending(a => a.StartTime)
-                .Select(a => new AppointmentDto
-                {
+                .Include(a => a.Staff)                    // join with Staff table to get the staff name
+                .OrderByDescending(a => a.StartTime)      // most recent appointments first
+                .Select(a => new AppointmentDto            // project into a DTO (data transfer object)
+                {                                          // DTOs control exactly what data we expose
                     Id = a.Id,
                     StaffId = a.StaffId,
-                    StaffName = a.Staff != null ? a.Staff.FullName : "",
+                    StaffName = a.Staff != null ? a.Staff.FullName : "",  // null-safe staff name
                     ClientName = a.ClientName,
                     ClientEmail = a.ClientEmail,
                     ClientPhone = a.ClientPhone,
                     StartTime = a.StartTime,
                     DurationMinutes = a.DurationMinutes,
-                    Status = a.Status,
+                    Status = a.Status,                     // "Scheduled", "Completed", or "Cancelled"
                     Notes = a.Notes,
                     CreatedAtUtc = a.CreatedAtUtc,
                     UpdatedAtUtc = a.UpdatedAtUtc
                 })
-                .ToListAsync();
+                .ToListAsync();                            // execute the SQL query
 
-            return Ok(appointments);
+            return Ok(appointments);                       // 200 OK with JSON array
         }
 
         /// GET: api/appointmentsapi/{id}
@@ -86,41 +93,45 @@ namespace AppointmentSystem.Web.Controllers.Api
         }
 
         /// POST: api/appointmentsapi
-        /// Creates a new appointment
+        /// Creates a new appointment — the client sends JSON with staff, client info, time, etc.
+        /// Returns 201 Created with a Location header pointing to the new resource
         [HttpPost]
-        [ProducesResponseType(typeof(AppointmentDto), 201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(AppointmentDto), 201)]  // 201 = resource created
+        [ProducesResponseType(400)]                           // 400 = validation error
         public async Task<ActionResult<AppointmentDto>> Create([FromBody] AppointmentCreateDto dto)
         {
+            // [ApiController] handles most validation, but we double-check
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // Verify the staff member exists
+            // make sure the referenced staff member actually exists in our database
             var staff = await _context.Staffs.FindAsync(dto.StaffId);
             if (staff == null)
                 return BadRequest(new { message = "Staff member not found." });
 
+            // build the new Appointment entity from the incoming DTO
             var appointment = new Appointment
             {
-                Id = Guid.NewGuid(),
-                StaffId = dto.StaffId,
+                Id = Guid.NewGuid(),              // generate unique primary key
+                StaffId = dto.StaffId,             // FK to the staff member
                 ClientName = dto.ClientName,
                 ClientEmail = dto.ClientEmail,
                 ClientPhone = dto.ClientPhone,
                 StartTime = dto.StartTime,
                 DurationMinutes = dto.DurationMinutes,
-                Status = dto.Status,
+                Status = dto.Status,               // "Scheduled", "Completed", or "Cancelled"
                 Notes = dto.Notes,
-                CreatedAtUtc = DateTime.UtcNow
+                CreatedAtUtc = DateTime.UtcNow     // timestamp when it was created
             };
 
-            _context.Appointments.Add(appointment);
-            await _context.SaveChangesAsync();
+            _context.Appointments.Add(appointment);   // queue for insertion
+            await _context.SaveChangesAsync();        // write to SQLite
 
+            // build the response DTO (includes staff name which wasn't in the create DTO)
             var result = new AppointmentDto
             {
                 Id = appointment.Id,
                 StaffId = appointment.StaffId,
-                StaffName = staff.FullName,
+                StaffName = staff.FullName,           // we looked this up earlier
                 ClientName = appointment.ClientName,
                 ClientEmail = appointment.ClientEmail,
                 ClientPhone = appointment.ClientPhone,
@@ -131,11 +142,14 @@ namespace AppointmentSystem.Web.Controllers.Api
                 CreatedAtUtc = appointment.CreatedAtUtc
             };
 
+            // REST best practice: return 201 with Location header
+            // Location: /api/appointmentsapi/{id}
             return CreatedAtAction(nameof(GetById), new { id = appointment.Id }, result);
         }
 
         /// PUT: api/appointmentsapi/{id}
-        /// Updates an existing appointment
+        /// Updates an existing appointment — full replacement (not partial/PATCH)
+        /// The client sends all fields, even the ones that didn't change
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(AppointmentDto), 200)]
         [ProducesResponseType(400)]
@@ -144,16 +158,20 @@ namespace AppointmentSystem.Web.Controllers.Api
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            // find the existing appointment by ID, include staff info
             var appointment = await _context.Appointments
                 .Include(a => a.Staff)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
+            // can't update what doesn't exist
             if (appointment == null) return NotFound(new { message = "Appointment not found." });
 
+            // if the staff assignment is changing, verify the new staff exists
             var staff = await _context.Staffs.FindAsync(dto.StaffId);
             if (staff == null)
                 return BadRequest(new { message = "Staff member not found." });
 
+            // overwrite all the fields with the new values from the DTO
             appointment.StaffId = dto.StaffId;
             appointment.ClientName = dto.ClientName;
             appointment.ClientEmail = dto.ClientEmail;
@@ -162,10 +180,11 @@ namespace AppointmentSystem.Web.Controllers.Api
             appointment.DurationMinutes = dto.DurationMinutes;
             appointment.Status = dto.Status;
             appointment.Notes = dto.Notes;
-            appointment.UpdatedAtUtc = DateTime.UtcNow;
+            appointment.UpdatedAtUtc = DateTime.UtcNow;   // track when it was last modified
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();             // persist to database
 
+            // return the updated appointment as a DTO
             return Ok(new AppointmentDto
             {
                 Id = appointment.Id,
@@ -184,19 +203,20 @@ namespace AppointmentSystem.Web.Controllers.Api
         }
 
         /// DELETE: api/appointmentsapi/{id}
-        /// Permanently deletes an appointment
+        /// Permanently removes an appointment from the database
+        /// Returns 204 No Content on success (REST convention for deletes)
         [HttpDelete("{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(204)]    // 204 = deleted successfully, no body
+        [ProducesResponseType(404)]    // 404 = appointment with this ID doesn't exist
         public async Task<IActionResult> Delete(Guid id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
             if (appointment == null) return NotFound(new { message = "Appointment not found." });
 
-            _context.Appointments.Remove(appointment);
-            await _context.SaveChangesAsync();
+            _context.Appointments.Remove(appointment);    // mark for deletion
+            await _context.SaveChangesAsync();            // execute the DELETE SQL
 
-            return NoContent();
+            return NoContent();                           // 204 — done, nothing to return
         }
     }
 }

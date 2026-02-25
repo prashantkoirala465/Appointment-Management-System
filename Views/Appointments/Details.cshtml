@@ -1,6 +1,12 @@
+@* ===== APPOINTMENT DETAILS VIEW =====
+   Read-only view showing full appointment info. Uses a <dl> (definition list)
+   for clean label-value pairs. The status badge color is computed with a C# switch expression. *@
+
 @model AppointmentSystem.Web.Models.Appointment
 @{
     ViewData["Title"] = "Appointment Details";
+
+    @* Compute the badge CSS class using a C# switch expression based on the status string *@
     var cls = Model.Status switch
     {
         "Scheduled" => "badge-scheduled",
@@ -18,8 +24,10 @@
 
 <div class="card-custom" style="max-width:640px;">
     <div class="card-body-custom">
+        @* detail-grid is a custom CSS <dl> layout for label+value pairs *@
         <dl class="detail-grid">
             <dt>Staff</dt>
+            @* null-safe access: if the Staff nav property wasn't loaded, show a dash *@
             <dd>@(Model.Staff?.FullName ?? "—")</dd>
 
             <dt>Client Name</dt>
@@ -32,19 +40,23 @@
             <dd>@(Model.ClientPhone ?? "—")</dd>
 
             <dt>Start Time</dt>
+            @* format the DateTime to a human-friendly string *@
             <dd>@Model.StartTime.ToString("MMM dd, yyyy  h:mm tt")</dd>
 
             <dt>Duration</dt>
             <dd>@Model.DurationMinutes minutes</dd>
 
             <dt>Status</dt>
+            @* show the coloured badge using the CSS class we computed above *@
             <dd><span class="badge-status @cls">@Model.Status</span></dd>
 
             <dt>Notes</dt>
+            @* if Notes is empty or whitespace, just show a dash instead of blank space *@
             <dd>@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</dd>
         </dl>
 
         <div class="btn-group-custom" style="margin-top:var(--space-lg);">
+            @* asp-route-id passes the Id so the Edit page knows which appointment to load *@
             <a class="btn-primary-custom" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
             <a class="btn-secondary-custom" asp-action="Index">Back to List</a>
         </div>

@@ -1,3 +1,16 @@
+@*
+    Account/Login.cshtml — Login page (Ananta's module)
+    This view renders the login form with username/password fields
+    plus a Google OAuth sign-in button.
+    
+    The @model directive binds this view to LoginViewModel which has
+    Username and Password properties with validation attributes.
+    
+    Tag helpers (asp-for, asp-action, asp-validation-for) automatically:
+    - Generate correct input names/ids from the model
+    - Wire up client-side validation matching server-side [Required] etc.
+    - Generate form action URLs from controller/action names
+*@
 @model AppointmentSystem.Web.Models.LoginViewModel
 @{
     ViewData["Title"] = "Login";
@@ -18,22 +31,29 @@
         <h1 class="login-title">Welcome back</h1>
         <p class="login-subtitle">Enter your credentials to access the dashboard.</p>
 
+        @* Show validation errors only when the form was submitted with errors *@
         @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
         {
             <div class="login-error">
+                @* asp-validation-summary="All" renders ALL error messages from ModelState *@
                 <div asp-validation-summary="All"></div>
             </div>
         }
 
+        @* asp-action="Login" makes the form POST to AccountController.Login *@
         <form asp-action="Login" method="post" class="form-custom">
             <div class="form-group">
                 <label asp-for="Username">Username</label>
+                @* asp-for="Username" generates name="Username" id="Username" *@
+                @* and adds data-val attributes for client-side validation *@
                 <input asp-for="Username" class="form-input" placeholder="e.g. admin" autocomplete="username" />
+                @* asp-validation-for renders errors specific to the Username field *@
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Password">Password</label>
+                @* asp-for automatically sets type="password" because the property is named Password *@
                 <input asp-for="Password" class="form-input" placeholder="Enter your password" autocomplete="current-password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -44,6 +64,8 @@
                     <span>or</span>
                 </div>
 
+                @* Google OAuth button — links to AccountController.GoogleLogin *@
+                @* The controller initiates the OAuth challenge flow with Google *@
                 <a asp-action="GoogleLogin" class="btn-google">
                     <svg width="18" height="18" viewBox="0 0 24 24">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" fill="#4285F4"/>
@@ -63,6 +85,9 @@
     </div>
 </div>
 
+@* Scripts section — injected into the @RenderSection("Scripts") in _Layout *@
+@* _ValidationScriptsPartial loads jQuery Validation + Unobtrusive Validation *@
+@* These scripts make the [Required] etc. validation work client-side without a page reload *@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

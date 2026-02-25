@@ -1,3 +1,8 @@
+@* ===== CREATE APPOINTMENT VIEW =====
+   Form for scheduling a new appointment. The model is an empty Appointment entity.
+   asp-for tag helpers bind each input to the model property so MVC knows what to POST.
+   StaffId dropdown is populated via ViewBag.StaffId (a SelectList built in the controller). *@
+
 @model AppointmentSystem.Web.Models.Appointment
 @{
     ViewData["Title"] = "Create Appointment";
@@ -10,12 +15,16 @@
 
 <div class="card-custom" style="max-width:640px;">
     <div class="card-body-custom">
+        @* asp-action="Create" makes the form POST to /Appointments/Create *@
         <form asp-action="Create" class="form-custom">
+            @* ModelOnly: only show errors not tied to a specific field (e.g. DB errors) *@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="StaffId">Staff</label>
+                @* asp-items pulls the SelectList from ViewBag — renders <option> for each active staff *@
                 <select asp-for="StaffId" class="form-input" asp-items="ViewBag.StaffId"></select>
+                @* asp-validation-for shows the error message next to this field if validation fails *@
                 <span asp-validation-for="StaffId" class="text-danger"></span>
             </div>
 
@@ -51,6 +60,7 @@
                 </div>
             </div>
 
+            @* Status dropdown: hardcoded options matching the Appointment model's allowed values *@
             <div class="form-group">
                 <label asp-for="Status">Status</label>
                 <select asp-for="Status" class="form-input">
@@ -70,12 +80,14 @@
 
             <div class="btn-group-custom" style="margin-top:var(--space-lg);">
                 <button type="submit" class="btn-primary-custom">Create Appointment</button>
+                @* Cancel just navigates back to the list — no form submission *@
                 <a class="btn-secondary-custom" asp-action="Index">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
+@* Load jQuery Validation + Unobtrusive Validation for client-side checks before POST *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

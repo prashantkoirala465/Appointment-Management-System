@@ -1,3 +1,8 @@
+@* ===== ROLES INDEX VIEW =====
+   Lists all roles in the system. Each role shows how many users are assigned to it
+   (via the UserRoles navigation property count). Active/Inactive badge shows role status.
+   The "Add Role" button links to Create. If no roles exist, an empty-state card appears. *@
+
 @model IEnumerable<AppointmentSystem.Web.Models.Role>
 @{
     ViewData["Title"] = "Roles";
@@ -29,15 +34,18 @@
                 </tr>
             </thead>
             <tbody>
+                @* Loop through each role and render a row *@
                 @foreach (var item in Model)
                 {
                     <tr>
                         <td style="font-weight:500;">@item.RoleName</td>
                         <td>@(item.Description ?? "—")</td>
                         <td>
+                            @* UserRoles.Count tells us how many users have this role assigned *@
                             <span class="badge-status badge-default">@item.UserRoles.Count assigned</span>
                         </td>
                         <td>
+                            @* Active/Inactive badge based on the IsActive boolean *@
                             @if (item.IsActive)
                             {
                                 <span class="badge-status badge-active">Active</span>

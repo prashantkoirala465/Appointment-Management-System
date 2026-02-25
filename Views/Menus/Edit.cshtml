@@ -1,3 +1,7 @@
+@* ===== EDIT MENU VIEW =====
+   Pre-filled form for updating an existing menu item. Same fields as Create.
+   The hidden Id field tells the controller which menu to update. *@
+
 @model AppointmentSystem.Web.Models.Menu
 @{
     ViewData["Title"] = "Edit Menu";
@@ -12,6 +16,7 @@
     <div class="card-body-custom">
         <form asp-action="Edit" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* hidden Id field — essential for the controller to identify which menu record to update *@
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">

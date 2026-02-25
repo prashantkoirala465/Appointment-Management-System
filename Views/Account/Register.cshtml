@@ -1,6 +1,16 @@
+@*
+    Account/Register.cshtml — Staff registration page (Ananta's module)
+    New staff members fill out this form to create an account.
+    After registering, they're redirected to RegistrationPending.cshtml
+    and must wait for admin approval before they can log in.
+    
+    @model RegisterViewModel — has FullName, Username, Email, Password, ConfirmPassword
+    Tag helpers (asp-for, asp-validation-for) bind form fields to model properties
+    and generate client-side validation matching the data annotations.
+*@
 @model AppointmentSystem.Web.Models.RegisterViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register";  @* sets the <title> in _Layout *@
 }
 
 <div class="login-page">
@@ -18,14 +28,18 @@
             <h1 class="login-title">Staff Registration</h1>
             <p class="login-subtitle">Create a staff account. An admin will review and approve your registration.</p>
 
+            @* Show validation errors if the form was submitted with issues *@
             @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
             {
                 <div class="login-error">
+                    @* asp-validation-summary="All" shows ALL server-side validation errors *@
                     <div asp-validation-summary="All"></div>
                 </div>
             }
 
+            @* asp-action="Register" posts to AccountController.Register *@
             <form asp-action="Register" method="post" class="form-custom">
+                @* asp-for generates id, name, and validation data attributes automatically *@
                 <div class="form-group">
                     <label asp-for="FullName">Full Name</label>
                     <input asp-for="FullName" class="form-input" placeholder="e.g. John Smith" autocomplete="name" />
@@ -50,6 +64,7 @@
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
+                @* [Compare("Password")] on the model makes this validate against Password field *@
                 <div class="form-group">
                     <label asp-for="ConfirmPassword">Confirm Password</label>
                     <input asp-for="ConfirmPassword" class="form-input" placeholder="Re-enter your password" autocomplete="new-password" />
@@ -62,6 +77,8 @@
                     <span>or</span>
                 </div>
 
+                @* Google OAuth — alternative registration method *@
+                @* Redirects to Google for auth, then AccountController.GoogleCallback handles the response *@
                 <a asp-controller="Account" asp-action="GoogleLogin" class="btn-google">
                     <svg width="18" height="18" viewBox="0 0 24 24">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" fill="#4285F4"/>
@@ -81,6 +98,7 @@
     </div>
 </div>
 
+@* Load validation scripts so client-side validation works (matches [Required] etc. on the model) *@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

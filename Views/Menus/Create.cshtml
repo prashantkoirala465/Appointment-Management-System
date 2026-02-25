@@ -1,3 +1,8 @@
+@* ===== ADD MENU VIEW =====
+   Form to create a new navigation menu item. MenuName and URL are required.
+   DisplayOrder controls where it appears in the sidebar (lower number = higher position).
+   The IsActive checkbox determines if this menu item is visible at all. *@
+
 @model AppointmentSystem.Web.Models.Menu
 @{
     ViewData["Title"] = "Add Menu";
@@ -10,6 +15,7 @@
 
 <div class="card-custom" style="max-width:540px;">
     <div class="card-body-custom">
+        @* POSTs to /Menus/Create — controller saves the new menu item to the DB *@
         <form asp-action="Create" class="form-custom">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -19,6 +25,7 @@
                 <span asp-validation-for="MenuName" class="text-danger"></span>
             </div>
 
+            @* Two-column grid: URL gets more space (2fr), display order is narrower (1fr) *@
             <div style="display:grid; grid-template-columns:2fr 1fr; gap:var(--space-md);">
                 <div class="form-group">
                     <label asp-for="Url">URL</label>
